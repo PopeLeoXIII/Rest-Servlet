@@ -1,5 +1,8 @@
-import arrayList.MyArrayList;
+package array_list;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,51 +10,59 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class AddTest {
     @Test
     void addIntegerTest() {
-        int items = 10;
         MyArrayList<Integer> arr = new MyArrayList<>(3);
-        arr.print();
+
+        int items = 10;
         for (int i = 0; i < items; i++) {
             arr.add(i);
-            arr.print();
         }
+
         assertEquals(items, arr.size());
     }
 
     @Test
     void addStringTest() {
-        int items = 10;
         MyArrayList<String> arr = new MyArrayList<>();
-        arr.print();
+
+        int items = 10;
         for (int i = 0; i < items; i++) {
             arr.add("str");
-            arr.print();
         }
+
         assertEquals(items, arr.size());
     }
-
     @Test
-    void addToBeginTest() {
+    void addSomeDataTest() {
+        MyArrayList<DataForTest> arr = new MyArrayList<>();
+
+        arr.add(new DataForTest(15, "first"));
+        arr.add(new DataForTest(2, "second"));
+        arr.add(new DataForTest(6, "third"));
+
+        assertEquals(3, arr.size());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void addByIndexTest(int index) {
         Integer newItem = 9;
-        int index = 4;
 
         MyArrayList<Integer> arr = new MyArrayList<>(new Integer[]{1, 2, 3, 4, 5});
-        arr.print();
         arr.add(index, newItem);
-        arr.print();
 
         assertEquals(newItem, arr.get(index));
     }
 
-    @Test
-    void addOutOfBounds() {
-        int insertIndex = 6;
+    @ParameterizedTest
+    @ValueSource(ints = {-100, -2, -1, 5, 6, 100})
+    void addOutOfBounds(int index) {
         MyArrayList<Integer> arr = new MyArrayList<>(new Integer[]{1, 2, 3, 4, 5});
 
         Exception exception = assertThrows(IndexOutOfBoundsException.class, () -> {
-            arr.add(insertIndex, 6);
+            arr.add(index, 6);
         });
 
-        assertEquals("Index: " + insertIndex + ", Size: " + arr.size(),
+        assertEquals("Index: " + index + ", Size: " + arr.size(),
                 exception.getMessage());
     }
 

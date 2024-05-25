@@ -1,4 +1,5 @@
-import arrayList.MyArrayList;
+package array_list;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -11,15 +12,11 @@ class GetSetTest {
     @Test
     void setAndGetTest() {
         int arraySize = 10000;
-         // Создание массива
         MyArrayList<Integer> myArray = new MyArrayList<>(arraySize);
-
-        // Генератор случайных чисел
 
         int[] numbers = new int[arraySize];
         Random random = new Random();
         for (int i = 0; i < arraySize; i++) {
-            // Заполнение массива случайными значениями от 0 до 99
             numbers[i] = random.nextInt(100);
             myArray.add(0);
         }
@@ -31,6 +28,16 @@ class GetSetTest {
         for (int i = 0; i < arraySize; i++) {
             assertEquals(numbers[i], myArray.get(i));
         }
+    }
+
+    @Test
+    void setAndGetNullTest() {
+        MyArrayList<Integer> arr = new MyArrayList<>(new Integer[]{1, 2, 3, 4, 5});
+
+        arr.set(0, null);
+        Integer nullInt = arr.get(0);
+
+        assertNull(nullInt);
     }
 
     @ParameterizedTest
