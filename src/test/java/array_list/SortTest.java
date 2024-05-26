@@ -135,5 +135,17 @@ public class SortTest {
         Integer[] valuesFromArray = arrayList.toArray(new Integer[0]);
         assertArrayEquals(values, valuesFromArray);
     }
+
+    @Test
+    void toArrayNullPointerTest() {
+        Integer[] values = {1, 2, 3, 4, 5};
+        MyArrayList<Integer> arrayList = new MyArrayList<>(values);
+
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            Integer[] valuesFromArray = arrayList.toArray(null);
+        });
+
+        assertEquals("The specified array is null", exception.getMessage());
+    }
 }
 

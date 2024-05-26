@@ -112,11 +112,11 @@ public class MyArrayList<E> {
      *
      * @param myArrayList collection containing elements to be added to this list
      * @return {@code true} if this list changed as a result of the call
-     * @throws NullPointerException if the specified collection is null
+     * @throws NullPointerException if the specified MyArrayList is null
      */
     public boolean addAll(MyArrayList<E> myArrayList) {
         if (myArrayList == null)
-            throw new NullPointerException();
+            throw new NullPointerException("The specified MyArrayList is null");
 
         if (size + myArrayList.size > array.length) {
             int newCap = size + myArrayList.size;

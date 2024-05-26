@@ -100,4 +100,30 @@ class AddTest {
                 exception.getMessage());
     }
 
+    @Test
+    void addAllWithNullTest() {
+        Object[] objects = new Object[100];
+        MyArrayList<Object> objectMyArrayList = new MyArrayList<>(objects);
+
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            objectMyArrayList.addAll(null);
+        });
+
+        assertEquals("The specified MyArrayList is null",
+                exception.getMessage());
+    }
+
+
+    @Test
+    void addAllArrayTest() {
+        MyArrayList<Integer> arrayFirst = new MyArrayList<>(new Integer[]{1, 2, 3, 4, 5});
+        MyArrayList<Integer> arraySecond = new MyArrayList<>(new Integer[]{6, 7, 8, 9, 10});
+
+        arrayFirst.addAll(arraySecond);
+
+        assertEquals(10, arrayFirst.size());
+        for (int i = 0; i < 10; i++) {
+            assertEquals(i + 1, arrayFirst.get(i));
+        }
+    }
 }
