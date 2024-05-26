@@ -90,7 +90,7 @@ public class MyArrayList<E> {
      * @throws IndexOutOfBoundsException {@inheritDoc}
      */
     public void add(int index, E element) {
-        checkOutOfBound(index, size - 1);
+        checkOutOfBound(index, size);
 
         if (array.length == size) {
             int newCap = (array.length + 1) * 2;
@@ -99,9 +99,11 @@ public class MyArrayList<E> {
             System.arraycopy(array, index, newArray, index + 1, array.length - index);
             array = newArray;
         } else {
-            System.arraycopy(array, index, array, index + 1, array.length - index);
+//            if (index != array.length)
+            System.arraycopy(array, index, array, index + 1, size - index);
         }
         array[index] = element;
+        size++;
     }
 
     /**

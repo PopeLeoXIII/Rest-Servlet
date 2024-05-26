@@ -43,7 +43,7 @@ class AddTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
     void addByIndexTest(int index) {
         Integer newItem = 9;
 
@@ -53,8 +53,42 @@ class AddTest {
         assertEquals(newItem, arr.get(index));
     }
 
+    @Test
+    void addToEmptyArrayTest() {
+        MyArrayList<Object> objectMyArrayList = new MyArrayList<>();
+
+        for (int i = 0; i < 100000; i++) {
+            objectMyArrayList.add(0, new Object());
+        }
+
+        assertEquals(100000, objectMyArrayList.size());
+    }
+
+    @Test
+    void addToInitWithCapacityTest() {
+        MyArrayList<Object> objectMyArrayList = new MyArrayList<>(100);
+
+        for (int i = 0; i < 100000; i++) {
+            objectMyArrayList.add(0, new Object());
+        }
+
+        assertEquals(100000, objectMyArrayList.size());
+    }
+
+    @Test
+    void addToInitWithArrayTest() {
+        Object[] objects = new Object[100];
+        MyArrayList<Object> objectMyArrayList = new MyArrayList<>(objects);
+
+        for (int i = 0; i < 100000; i++) {
+            objectMyArrayList.add(0, new Object());
+        }
+
+        assertEquals(100100, objectMyArrayList.size());
+    }
+
     @ParameterizedTest
-    @ValueSource(ints = {-100, -2, -1, 5, 6, 100})
+    @ValueSource(ints = {-100, -2, -1, 6, 7, 100})
     void addOutOfBounds(int index) {
         MyArrayList<Integer> arr = new MyArrayList<>(new Integer[]{1, 2, 3, 4, 5});
 
