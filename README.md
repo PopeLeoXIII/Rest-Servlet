@@ -18,3 +18,36 @@
 14) Слой сервлетов, сервисный слой тестировать с помощью Mockito
 15) БД на выбор Pestgres, MySQL
 16) Ставим плагин SonarLint
+
+
+VehicleAvailability {
+"vehicle": VehicleItem,
+"nearestReservations: List<Reservation>,
+}
+
+VehicleItem {
+"id": Vehicle.id,
+"name": Vehicle.name,
+"image": vechicle.image,
+}
+
+Reservation {
+"id": Reservation.id,
+"startDateTime": Reservation.startDateTime в таймзоне текущего города (по HEADER_CITY_ID),
+"endDateTime": Reservation.endDateTime в таймзоне текущего города (по HEADER_CITY_ID),
+"user": User,
+}
+
+UserReservation {
+"id": Reservation.id,
+"startDateTime": Reservation.startDateTime в таймзоне текущего города (по HEADER_CITY_ID),
+"endDateTime": Reservation.endDateTime в таймзоне текущего города (по HEADER_CITY_ID),
+"vehicles": List<VehicleItem>,
+}
+
+User {
+"id": User.id,
+"name": User.name,
+"surname": User.surname,
+}
+
