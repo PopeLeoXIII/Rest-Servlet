@@ -8,13 +8,13 @@ import org.example.servlet.dto.city.CityUpdateDto;
 import java.util.List;
 
 public interface CityService {
-    CityOutGoingDto save(CityIncomingDto role);
+    CityOutGoingDto save(CityIncomingDto incomingDto);
 
-    void update(CityUpdateDto role) throws NotFoundException;
+    void update(CityUpdateDto updateDto) throws NotFoundException;
 
-    CityOutGoingDto findById(Long roleId) throws NotFoundException;
+    CityOutGoingDto findById(Long id) throws NotFoundException;
 
     List<CityOutGoingDto> findAll();
 
-    boolean delete(Long roleId) throws NotFoundException;
+    boolean delete(Long id) throws NotFoundException;
 }

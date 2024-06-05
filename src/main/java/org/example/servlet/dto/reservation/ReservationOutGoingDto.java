@@ -4,18 +4,17 @@ import org.example.model.Status;
 import org.example.servlet.dto.user.UserOutGoingDto;
 import org.example.servlet.dto.vehicle.VehicleOutGoingDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class ReservationOutGoingDto {
     private Long id;
     private Status status;
-    private LocalDateTime startDatetime;
-    private LocalDateTime endDatetime;
+    private String startDatetime;
+    private String endDatetime;
     private List<VehicleOutGoingDto> vehicleList;
     private UserOutGoingDto user;
 
-    public ReservationOutGoingDto(Long id, Status status, LocalDateTime startDatetime, LocalDateTime endDatetime, List<VehicleOutGoingDto> vehicleList, UserOutGoingDto user) {
+    public ReservationOutGoingDto(Long id, Status status, String startDatetime, String endDatetime, List<VehicleOutGoingDto> vehicleList, UserOutGoingDto user) {
         this.id = id;
         this.status = status;
         this.startDatetime = startDatetime;
@@ -32,11 +31,11 @@ public class ReservationOutGoingDto {
         return status;
     }
 
-    public LocalDateTime getStartDatetime() {
+    public String getStartDatetime() {
         return startDatetime;
     }
 
-    public LocalDateTime getEndDatetime() {
+    public String getEndDatetime() {
         return endDatetime;
     }
 

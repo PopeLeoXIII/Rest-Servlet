@@ -4,6 +4,19 @@ import org.example.model.City;
 import org.example.repository.CityRepository;
 
 public class CityRepositoryImpl implements CityRepository {
+    private static CityRepository instance;
+
+    private CityRepositoryImpl () {
+    }
+
+    public static synchronized CityRepository getInstance() {
+        if (instance == null) {
+            instance = new CityRepositoryImpl();
+        }
+        return instance;
+    }
+
+
     @Override
     public City findById(Long id) {
         return null;

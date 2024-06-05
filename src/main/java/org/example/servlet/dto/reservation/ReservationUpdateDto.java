@@ -12,12 +12,12 @@ import java.util.List;
 public class ReservationUpdateDto {
     private Long id;
     private Status status;
-    private LocalDateTime startDatetime;
-    private LocalDateTime endDatetime;
+    private String startDatetime;
+    private String endDatetime;
     private List<VehicleUpdateDto> vehicleList;
     private UserUpdateDto user;
 
-    public ReservationUpdateDto(Long id, Status status, LocalDateTime startDatetime, LocalDateTime endDatetime, List<VehicleUpdateDto> vehicleList, UserUpdateDto user) {
+    public ReservationUpdateDto(Long id, Status status, String startDatetime, String endDatetime, List<VehicleUpdateDto> vehicleList, UserUpdateDto user) {
         this.id = id;
         this.status = status;
         this.startDatetime = startDatetime;
@@ -34,11 +34,11 @@ public class ReservationUpdateDto {
         return status;
     }
 
-    public LocalDateTime getStartDatetime() {
+    public String getStartDatetime() {
         return startDatetime;
     }
 
-    public LocalDateTime getEndDatetime() {
+    public String getEndDatetime() {
         return endDatetime;
     }
 
