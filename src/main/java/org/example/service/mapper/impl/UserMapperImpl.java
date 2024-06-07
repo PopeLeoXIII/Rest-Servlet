@@ -1,6 +1,5 @@
 package org.example.service.mapper.impl;
 
-import org.example.model.Reservation;
 import org.example.model.User;
 import org.example.service.mapper.ReservationMapper;
 import org.example.service.mapper.UserMapper;
@@ -37,16 +36,11 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public User mapUpdateDto(UserUpdateDto updateDto) {
-        List<Reservation> list = null;
-        if (updateDto.getReservationList() != null && !updateDto.getReservationList().isEmpty()) {
-            list = updateDto.getReservationList().stream().map(reservationMapper::mapUpdateDto).toList();
-        }
-
         return new User(
                 updateDto.getId(),
                 updateDto.getName(),
                 updateDto.getSurname(),
-                list
+                null
         );
     }
 
@@ -60,7 +54,7 @@ public class UserMapperImpl implements UserMapper {
                 model.getId(),
                 model.getName(),
                 model.getSurname(),
-                reservationMapper.mapModelListToSmallDto(model.getReservationList())
+                reservationMapper.mapModelListToPlaneDto(model.getReservationList())
         );
     }
 

@@ -1,15 +1,10 @@
 package org.example.servlet.dto.vehicle;
 
-import org.example.model.City;
-import org.example.model.Reservation;
-
-import java.util.List;
-
-public class VehicleSmallOutGoingDto {
+public class VehiclePlaneDto {
     private Long id;
     private String name;
 
-    public VehicleSmallOutGoingDto(Long id, String name) {
+    public VehiclePlaneDto(Long id, String name) {
         this.id = id;
         this.name = name;
     }

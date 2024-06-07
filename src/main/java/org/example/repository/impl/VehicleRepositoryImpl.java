@@ -6,6 +6,7 @@ import org.example.db.ConnectionManager;
 import org.example.db.ConnectionManagerImpl;
 import org.example.model.City;
 import org.example.model.Reservation;
+import org.example.model.ReservationToVehicle;
 import org.example.model.Vehicle;
 import org.example.repository.ReservationToVehicleRepository;
 import org.example.repository.VehicleRepository;
@@ -35,7 +36,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement getVehicle = connection.prepareStatement(SELECT_VEHICLE_BY_ID);) {
 
-            List<Reservation> reservationList = rToVRepository.getReservationByVehicleId(id);
+            List<Reservation> reservationList = rToVRepository.findReservationListByVehicleId(id);
 
             getVehicle.setLong(1, id);
             try (ResultSet rs = getVehicle.executeQuery();) {
@@ -60,7 +61,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
                 List<Vehicle> vehicleList = new ArrayList<>();
                 while (rs.next()) {
                     long id = rs.getLong("id");
-                    List<Reservation> reservationList = rToVRepository.getReservationByVehicleId(id);
+                    List<Reservation> reservationList = rToVRepository.findReservationListByVehicleId(id);
 
                     vehicleList.add(createVehicle(id, rs, reservationList));
                 }
@@ -135,9 +136,13 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 
     @Override
     public boolean deleteById(Long id) {
-
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement s = connection.prepareStatement(DELETE_VEHICLE);) {
+
+            List<Reservation> reservationList = rToVRepository.findReservationListByVehicleId(id);
+
+            reservationList.forEach(reservation -> rToVRepository.deleteByData(
+                    new ReservationToVehicle(null, reservation.getId(), id)));
 
             s.setLong(1, id);
             return s.executeUpdate() > 0;

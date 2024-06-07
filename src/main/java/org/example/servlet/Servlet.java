@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.servlet.dto.city.CityOutGoingDto;
-import org.example.servlet.dto.vehicle.VehicleSmallOutGoingDto;
+import org.example.servlet.dto.vehicle.VehiclePlaneDto;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -64,8 +64,8 @@ public class Servlet extends HttpServlet {
             1L,
             "saratov",
             Arrays.asList(
-                    new VehicleSmallOutGoingDto(1L, "velo 1"),
-                    new VehicleSmallOutGoingDto(2L, "velo 2")
+                    new VehiclePlaneDto(1L, "velo 1"),
+                    new VehiclePlaneDto(2L, "velo 2")
             )
     );
     

@@ -6,11 +6,9 @@ import org.example.service.mapper.UserMapper;
 import org.example.service.mapper.VehicleMapper;
 import org.example.servlet.dto.reservation.ReservationIncomingDto;
 import org.example.servlet.dto.reservation.ReservationOutGoingDto;
-import org.example.servlet.dto.reservation.ReservationSmallOutGoingDto;
+import org.example.servlet.dto.reservation.ReservationPlaneDto;
 import org.example.servlet.dto.reservation.ReservationUpdateDto;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ReservationMapperImpl implements ReservationMapper {
@@ -36,8 +34,8 @@ public class ReservationMapperImpl implements ReservationMapper {
                 reservationIncomingDto.getStatus(),
                 reservationIncomingDto.getStartDatetime(),
                 reservationIncomingDto.getEndDatetime(),
-                null,
-                null
+                vehicleMapper.mapPlaneDtoListToModel(reservationIncomingDto.getVehicleList()),
+                userMapper.mapUpdateDto(reservationIncomingDto.getUser())
         );
     }
 
@@ -48,7 +46,7 @@ public class ReservationMapperImpl implements ReservationMapper {
                 reservationUpdateDto.getStatus(),
                 reservationUpdateDto.getStartDatetime(),
                 reservationUpdateDto.getEndDatetime(),
-                reservationUpdateDto.getVehicleList().stream().map(vehicleMapper::mapUpdateDto).toList(),
+                vehicleMapper.mapPlaneDtoListToModel(reservationUpdateDto.getVehicleList()),
                 userMapper.mapUpdateDto(reservationUpdateDto.getUser())
         );
     }
@@ -64,7 +62,7 @@ public class ReservationMapperImpl implements ReservationMapper {
                 model.getStatus(),
                 model.getStartDatetime().toString(),
                 model.getEndDatetime().toString(),
-                vehicleMapper.mapModelList(model.getVehicleList()),
+                vehicleMapper.mapModelListToPlaneDto(model.getVehicleList()),
                 userMapper.mapModel(model.getUser())
         );
     }
@@ -75,8 +73,8 @@ public class ReservationMapperImpl implements ReservationMapper {
     }
 
     @Override
-    public ReservationSmallOutGoingDto mapModelToSmallDto(Reservation model) {
-        return new ReservationSmallOutGoingDto(
+    public ReservationPlaneDto mapModelToPlaneDto(Reservation model) {
+        return new ReservationPlaneDto(
                 model.getId(),
                 model.getStatus(),
                 model.getStartDatetime().toString(),
@@ -85,7 +83,7 @@ public class ReservationMapperImpl implements ReservationMapper {
     }
 
     @Override
-    public List<ReservationSmallOutGoingDto> mapModelListToSmallDto(List<Reservation> modelList) {
-        return modelList.stream().map(this::mapModelToSmallDto).toList();
+    public List<ReservationPlaneDto> mapModelListToPlaneDto(List<Reservation> modelList) {
+        return modelList.stream().map(this::mapModelToPlaneDto).toList();
     }
 }

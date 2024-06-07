@@ -2,7 +2,7 @@ package org.example.repository;
 
 public class SqlQuery {
     public static final String SELECT_VEHICLES_BY_RES_ID =
-            "SELECT id, name " +
+            "SELECT vehicle_id, name " +
             "FROM reservations_vehicles rv JOIN vehicles v " +
             "ON v.id = rv.vehicle_id " +
             "WHERE rv.reservation_id = ?";
@@ -44,7 +44,7 @@ public class SqlQuery {
 
 
     public static final String SELECT_RES_BY_VEHICLE_ID =
-            "SELECT status, start_datetime, end_datetime " +
+            "SELECT reservation_id, status, start_datetime, end_datetime " +
             "FROM reservations_vehicles rv JOIN reservations r " +
             "ON r.id = rv.reservation_id " +
             "WHERE rv.vehicle_id = ?";

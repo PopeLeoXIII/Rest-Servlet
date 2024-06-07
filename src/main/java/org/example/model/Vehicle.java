@@ -56,7 +56,7 @@ public class Vehicle {
 
     public List<Reservation> getReservationList() {
         if (reservationList == null) {
-            reservationList = reservationToVehicleRepository.getReservationByVehicleId(this.id);
+            reservationList = reservationToVehicleRepository.findReservationListByVehicleId(this.id);
         }
         return reservationList;
     }

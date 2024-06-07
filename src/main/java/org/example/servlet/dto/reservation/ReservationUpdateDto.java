@@ -4,6 +4,7 @@ import org.example.model.Status;
 import org.example.model.User;
 import org.example.model.Vehicle;
 import org.example.servlet.dto.user.UserUpdateDto;
+import org.example.servlet.dto.vehicle.VehiclePlaneDto;
 import org.example.servlet.dto.vehicle.VehicleUpdateDto;
 
 import java.time.LocalDateTime;
@@ -14,12 +15,12 @@ public class ReservationUpdateDto {
     private Status status;
     private String startDatetime;
     private String endDatetime;
-    private List<VehicleUpdateDto> vehicleList;
+    private List<VehiclePlaneDto> vehicleList;
     private UserUpdateDto user;
 
     public ReservationUpdateDto() {}
 
-    public ReservationUpdateDto(Long id, Status status, String startDatetime, String endDatetime, List<VehicleUpdateDto> vehicleList, UserUpdateDto user) {
+    public ReservationUpdateDto(Long id, Status status, String startDatetime, String endDatetime, List<VehiclePlaneDto> vehicleList, UserUpdateDto user) {
         this.id = id;
         this.status = status;
         this.startDatetime = startDatetime;
@@ -44,7 +45,7 @@ public class ReservationUpdateDto {
         return endDatetime;
     }
 
-    public List<VehicleUpdateDto> getVehicleList() {
+    public List<VehiclePlaneDto> getVehicleList() {
         return vehicleList;
     }
 

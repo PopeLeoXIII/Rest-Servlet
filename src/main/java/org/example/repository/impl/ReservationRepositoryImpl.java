@@ -33,7 +33,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement getReservation = connection.prepareStatement(SELECT_USER_JOIN_RES_BY_ID);) {
 
-            List<Vehicle> vehicleList = rToVRepository.getVehicleByReservationId(id);
+            List<Vehicle> vehicleList = rToVRepository.findVehicleListByReservationId(id);
 
             getReservation.setLong(1, id);
             try (ResultSet rs = getReservation.executeQuery();) {
@@ -58,7 +58,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
                 List<Reservation> reservationList = new ArrayList<>();
                 while (rs.next()) {
                     long id = rs.getLong("id");
-                    List<Vehicle> vehicleList = rToVRepository.getVehicleByReservationId(id);
+                    List<Vehicle> vehicleList = rToVRepository.findVehicleListByReservationId(id);
 
                     reservationList.add(
                             createReservation(id, rs, vehicleList)
@@ -71,59 +71,40 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         }
     }
 
-    private static Reservation createReservation(Long id, ResultSet rs, List<Vehicle> vehicleList) throws SQLException {
-        return new Reservation(
-                id,
-                Status.valueOf(rs.getString("status")),
-                rs.getTimestamp("start_datetime"),
-                rs.getTimestamp("end_datetime"),
-                vehicleList,
-                new User(
-                        rs.getLong("user_id"),
-                        rs.getString("name"),
-                        rs.getString("surname"),
-                        null
-                ));
-    }
-
 
     @Override
     public Reservation save(Reservation reservation) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement s = connection.prepareStatement(INSERT_RES, Statement.RETURN_GENERATED_KEYS);) {
 
-            connection.setAutoCommit(false);
+//            connection.setAutoCommit(false);
 
-            s.setString(1, reservation.getStatus().toString());
-            s.setTimestamp(2, reservation.getStartDatetime());
-            s.setTimestamp(3, reservation.getEndDatetime());
-            if (reservation.getUser() == null) {
-                s.setNull(4, Types.NULL);
-            } else {
-                s.setLong(4, reservation.getUser().getId());
-            }
-
+            List<Vehicle> insertVehicleList = reservation.getVehicleList();
+            fillReservationData(reservation, s);
             s.executeUpdate();
 
-            if (reservation.getVehicleList() != null && !reservation.getVehicleList().isEmpty()) {
-                updateReservationVehicle(reservation);
-            }
-
+            Reservation newReservation = null;
             try (ResultSet rs = s.getGeneratedKeys()) {
                 if (rs.next()) {
-                    connection.commit();
-                    return new Reservation(
+
+                    newReservation = new Reservation(
                             rs.getLong("id"),
                             reservation.getStatus(),
                             reservation.getStartDatetime(),
                             reservation.getEndDatetime(),
-                            null,
+                            insertVehicleList,
                             reservation.getUser());
                 } else {
                     throw new RepositoryException("No create reservation id ");
                 }
             }
 
+            if (newReservation.getVehicleList() != null && !newReservation.getVehicleList().isEmpty()) {
+                updateReservationVehicle(newReservation);
+            }
+
+//            connection.commit();
+            return newReservation;
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
@@ -140,14 +121,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
                 updateReservationVehicle(reservation);
             }
 
-            updateReservation.setString(1, reservation.getStatus().toString());
-            updateReservation.setTimestamp(2, reservation.getStartDatetime());
-            updateReservation.setTimestamp(3, reservation.getEndDatetime());
-            if (reservation.getUser() == null) {
-                updateReservation.setNull(4, Types.NULL);
-            } else {
-                updateReservation.setLong(4, reservation.getUser().getId());
-            }
+            fillReservationData(reservation, updateReservation);
             updateReservation.setLong(5, reservation.getId());
             updateReservation.executeUpdate();
 
@@ -158,28 +132,15 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     }
 
-    private void updateReservationVehicle(Reservation reservation) {
-        List<Vehicle> vehicleList =
-                rToVRepository.getVehicleByReservationId(reservation.getId());
-
-        List<Long> oldVehicleId = vehicleList.stream().map(Vehicle::getId).toList();
-        List<Long> newVehicleId = reservation.getVehicleList().stream().map(Vehicle::getId).toList();
-
-        oldVehicleId.stream()
-                .filter(id -> !newVehicleId.contains(id))
-                .forEach(id -> rToVRepository.deleteByData(
-                        new ReservationToVehicle(null, reservation.getId(), id)));
-
-        newVehicleId.stream()
-                .filter(id -> !oldVehicleId.contains(id))
-                .forEach(id -> rToVRepository.save(
-                        new ReservationToVehicle(null, reservation.getId(), id)));
-    }
-
     @Override
     public boolean deleteById(Long id) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement s = connection.prepareStatement(DELETE_RES);) {
+
+            List<Vehicle> vehicleList = rToVRepository.findVehicleListByReservationId(id);
+
+            vehicleList.forEach(vehicle -> rToVRepository.deleteByData(
+                    new ReservationToVehicle(null, id, vehicle.getId())));
 
             s.setLong(1, id);
             return s.executeUpdate() > 0;
@@ -190,7 +151,6 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     @Override
     public List<Reservation> findAllByUserId(User user) {
-
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement s = connection.prepareStatement(SELECT_RES_BY_USER_ID);) {
 
@@ -213,5 +173,49 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
+    }
+
+    private void updateReservationVehicle(Reservation reservation) {
+        List<Vehicle> vehicleList =
+                rToVRepository.findVehicleListByReservationId(reservation.getId());
+
+        List<Long> oldVehicleId = vehicleList.stream().map(Vehicle::getId).toList();
+        List<Long> newVehicleId = reservation.getVehicleList().stream().map(Vehicle::getId).toList();
+
+        oldVehicleId.stream()
+                .filter(id -> !newVehicleId.contains(id))
+                .forEach(id -> rToVRepository.deleteByData(
+                        new ReservationToVehicle(null, reservation.getId(), id)));
+
+        newVehicleId.stream()
+                .filter(id -> !oldVehicleId.contains(id))
+                .forEach(id -> rToVRepository.save(
+                        new ReservationToVehicle(null, reservation.getId(), id)));
+    }
+
+    private void fillReservationData(Reservation reservation, PreparedStatement s) throws SQLException {
+        s.setString(1, reservation.getStatus().toString());
+        s.setTimestamp(2, reservation.getStartDatetime());
+        s.setTimestamp(3, reservation.getEndDatetime());
+        if (reservation.getUser() == null) {
+            s.setNull(4, Types.NULL);
+        } else {
+            s.setLong(4, reservation.getUser().getId());
+        }
+    }
+
+    private static Reservation createReservation(Long id, ResultSet rs, List<Vehicle> vehicleList) throws SQLException {
+        return new Reservation(
+                id,
+                Status.valueOf(rs.getString("status")),
+                rs.getTimestamp("start_datetime"),
+                rs.getTimestamp("end_datetime"),
+                vehicleList,
+                new User(
+                        rs.getLong("user_id"),
+                        rs.getString("name"),
+                        rs.getString("surname"),
+                        null
+                ));
     }
 }

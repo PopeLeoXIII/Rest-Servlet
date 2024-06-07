@@ -9,9 +9,9 @@ import java.util.List;
 public interface ReservationToVehicleRepository {
     ReservationToVehicle save(ReservationToVehicle reservationToVehicle);
 
-    List<Vehicle> getVehicleByReservationId(Long id);
+    List<Vehicle> findVehicleListByReservationId(Long id);
 
-    List<Reservation> getReservationByVehicleId(Long id);
+    List<Reservation> findReservationListByVehicleId(Long id);
 
     boolean deleteByData(ReservationToVehicle reservationToVehicle);
 }

@@ -8,7 +8,7 @@ import org.example.service.mapper.ReservationMapper;
 import org.example.service.mapper.VehicleMapper;
 import org.example.servlet.dto.vehicle.VehicleIncomingDto;
 import org.example.servlet.dto.vehicle.VehicleOutGoingDto;
-import org.example.servlet.dto.vehicle.VehicleSmallOutGoingDto;
+import org.example.servlet.dto.vehicle.VehiclePlaneDto;
 import org.example.servlet.dto.vehicle.VehicleUpdateDto;
 
 import java.util.List;
@@ -67,7 +67,7 @@ public class VehicleMapperImpl implements VehicleMapper {
                 model.getId(),
                 model.getName(),
                 cityMapper.mapModel(model.getCity()),
-                reservationMapper.mapModelListToSmallDto((model.getReservationList()))
+                reservationMapper.mapModelListToPlaneDto((model.getReservationList()))
         );
     }
 
@@ -77,15 +77,30 @@ public class VehicleMapperImpl implements VehicleMapper {
     }
 
     @Override
-    public VehicleSmallOutGoingDto mapModelToSmallDto(Vehicle model) {
-        return new VehicleSmallOutGoingDto(
+    public VehiclePlaneDto mapModelToPlaneDto(Vehicle model) {
+        return new VehiclePlaneDto(
                 model.getId(),
                 model.getName()
         );
     }
 
     @Override
-    public List<VehicleSmallOutGoingDto> mapModelListToSmallDto(List<Vehicle> modelList) {
-        return modelList.stream().map(this::mapModelToSmallDto).toList();
+    public List<VehiclePlaneDto> mapModelListToPlaneDto(List<Vehicle> modelList) {
+        return modelList.stream().map(this::mapModelToPlaneDto).toList();
+    }
+
+    @Override
+    public Vehicle mapPlaneDtoToVehicle(VehiclePlaneDto planeDto) {
+        return new Vehicle(
+                planeDto.getId(),
+                planeDto.getName(),
+                null,
+                null
+        );
+    }
+
+    @Override
+    public List<Vehicle> mapPlaneDtoListToModel(List<VehiclePlaneDto> planeDtoList) {
+        return planeDtoList.stream().map(this::mapPlaneDtoToVehicle).toList();
     }
 }

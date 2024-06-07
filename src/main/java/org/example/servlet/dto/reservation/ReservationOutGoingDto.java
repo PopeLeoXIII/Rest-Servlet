@@ -3,6 +3,7 @@ package org.example.servlet.dto.reservation;
 import org.example.model.Status;
 import org.example.servlet.dto.user.UserOutGoingDto;
 import org.example.servlet.dto.vehicle.VehicleOutGoingDto;
+import org.example.servlet.dto.vehicle.VehiclePlaneDto;
 
 import java.util.List;
 
@@ -11,12 +12,12 @@ public class ReservationOutGoingDto {
     private Status status;
     private String startDatetime;
     private String endDatetime;
-    private List<VehicleOutGoingDto> vehicleList;
+    private List<VehiclePlaneDto> vehicleList;
     private UserOutGoingDto user;
 
     public ReservationOutGoingDto() {}
 
-    public ReservationOutGoingDto(Long id, Status status, String startDatetime, String endDatetime, List<VehicleOutGoingDto> vehicleList, UserOutGoingDto user) {
+    public ReservationOutGoingDto(Long id, Status status, String startDatetime, String endDatetime, List<VehiclePlaneDto> vehicleList, UserOutGoingDto user) {
         this.id = id;
         this.status = status;
         this.startDatetime = startDatetime;
@@ -41,7 +42,7 @@ public class ReservationOutGoingDto {
         return endDatetime;
     }
 
-    public List<VehicleOutGoingDto> getVehicleList() {
+    public List<VehiclePlaneDto> getVehicleList() {
         return vehicleList;
     }
 

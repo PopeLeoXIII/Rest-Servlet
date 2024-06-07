@@ -55,7 +55,7 @@ public class ReservationToVehicleRepositoryImpl implements ReservationToVehicleR
     }
 
     @Override
-    public List<Vehicle> getVehicleByReservationId(Long id) {
+    public List<Vehicle> findVehicleListByReservationId(Long id) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement s = connection.prepareStatement(SELECT_VEHICLES_BY_RES_ID)) {
             List<Vehicle> vehicleList = new ArrayList<>();
@@ -64,7 +64,7 @@ public class ReservationToVehicleRepositoryImpl implements ReservationToVehicleR
                 while (rs.next()) {
                     vehicleList.add(
                             new Vehicle(
-                                    rs.getLong("id"),
+                                    rs.getLong("vehicle_id"),
                                     rs.getString("name"),
                                     null,
                                     null
@@ -79,16 +79,16 @@ public class ReservationToVehicleRepositoryImpl implements ReservationToVehicleR
 
 
     @Override
-    public List<Reservation> getReservationByVehicleId(Long id) {
+    public List<Reservation> findReservationListByVehicleId(Long id) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement s = connection.prepareStatement(SELECT_RES_BY_VEHICLE_ID)) {
             List<Reservation> reservationList = new ArrayList<>();
             s.setLong(1, id);
-            try (ResultSet rs = s.executeQuery();) {
+            try (ResultSet rs = s.executeQuery()) {
                 while (rs.next()) {
                     reservationList.add(
                             new Reservation(
-                                    id,
+                                    rs.getLong("reservation_id"),
                                     Status.valueOf(rs.getString("status")),
                                     rs.getTimestamp("start_datetime"),
                                     rs.getTimestamp("end_datetime"),

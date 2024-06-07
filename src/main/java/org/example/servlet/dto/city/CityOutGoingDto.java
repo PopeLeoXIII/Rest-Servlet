@@ -1,17 +1,17 @@
 package org.example.servlet.dto.city;
 
-import org.example.servlet.dto.vehicle.VehicleSmallOutGoingDto;
+import org.example.servlet.dto.vehicle.VehiclePlaneDto;
 
 import java.util.List;
 
 public class CityOutGoingDto {
     private Long id;
     private String name;
-    private List<VehicleSmallOutGoingDto> vehicleList;
+    private List<VehiclePlaneDto> vehicleList;
 
     public CityOutGoingDto(){}
 
-    public CityOutGoingDto(Long id, String name, List<VehicleSmallOutGoingDto> vehicleList) {
+    public CityOutGoingDto(Long id, String name, List<VehiclePlaneDto> vehicleList) {
         this.id = id;
         this.name = name;
         this.vehicleList = vehicleList;
@@ -25,7 +25,7 @@ public class CityOutGoingDto {
         return name;
     }
 
-    public List<VehicleSmallOutGoingDto> getVehicleList() {
+    public List<VehiclePlaneDto> getVehicleList() {
         return vehicleList;
     }
 }

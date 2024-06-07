@@ -2,15 +2,15 @@ package org.example.servlet.dto.reservation;
 
 import org.example.model.Status;
 
-public class ReservationSmallOutGoingDto {
+public class ReservationPlaneDto {
     private Long id;
     private Status status;
     private String startDatetime;
     private String endDatetime;
 
-    public ReservationSmallOutGoingDto() {}
+    public ReservationPlaneDto() {}
 
-    public ReservationSmallOutGoingDto(Long id, Status status, String startDatetime, String endDatetime) {
+    public ReservationPlaneDto(Long id, Status status, String startDatetime, String endDatetime) {
         this.id = id;
         this.status = status;
         this.startDatetime = startDatetime;

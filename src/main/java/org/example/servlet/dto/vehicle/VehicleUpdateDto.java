@@ -1,8 +1,6 @@
 package org.example.servlet.dto.vehicle;
 
-import org.example.servlet.dto.city.CityOutGoingDto;
 import org.example.servlet.dto.city.CityUpdateDto;
-import org.example.servlet.dto.reservation.ReservationSmallOutGoingDto;
 import org.example.servlet.dto.reservation.ReservationUpdateDto;
 
 import java.util.List;

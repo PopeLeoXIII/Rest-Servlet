@@ -50,7 +50,7 @@ public class CityMapperImpl implements CityMapper {
         return new CityOutGoingDto(
                 model.getId(),
                 model.getName(),
-                vehicleMapper.mapModelListToSmallDto(model.getVehicleList())
+                vehicleMapper.mapModelListToPlaneDto(model.getVehicleList())
         );
     }
 

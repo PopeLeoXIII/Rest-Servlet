@@ -22,7 +22,6 @@ import java.util.List;
  */
 
 public class Reservation {
-//    private static final ReservationRepository repository = ReservationRepositoryImpl.getInstance();
     private static final ReservationToVehicleRepository reservationToVehicleRepository = ReservationToVehicleRepositoryImpl.getInstance();
     private Long id;
     private Status status;
@@ -88,10 +87,9 @@ public class Reservation {
     }
 
     public List<Vehicle> getVehicleList() {
-        if (vehicleList == null) {
+        if (vehicleList == null && id != null) {
             vehicleList =
-                    reservationToVehicleRepository.getVehicleByReservationId(this.id);
-//                    repository.getVehicleListByReservationId(this.id);
+                    reservationToVehicleRepository.findVehicleListByReservationId(this.id);
         }
         return vehicleList;
     }
