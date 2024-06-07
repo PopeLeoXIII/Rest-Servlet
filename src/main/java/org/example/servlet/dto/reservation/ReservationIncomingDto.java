@@ -7,6 +7,8 @@ public class ReservationIncomingDto {
     private String startDatetime;
     private String endDatetime;
 
+    public ReservationIncomingDto() {}
+
     public ReservationIncomingDto(Status status, String startDatetime, String endDatetime) {
         this.status = status;
         this.startDatetime = startDatetime;

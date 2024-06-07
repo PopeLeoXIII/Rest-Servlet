@@ -27,15 +27,11 @@ public class VehicleServlet extends Servlet {
         try {
             if ("all".equals(pathPart[1])) {
                 List<VehicleOutGoingDto> allVehicle = service.findAll();
-
-//                allVehicle = Arrays.asList(CITY_OUT_GOING_DTO, CITY_OUT_GOING_DTO);
                 sendResponse(resp, new Gson().toJson(allVehicle), HttpServletResponse.SC_OK);
             } else if (isNumber(pathPart[1])) {
                 Long id = getLong(pathPart[1]);
 
                 VehicleOutGoingDto vehicle = service.findById(id);
-
-//                vehicle = CITY_OUT_GOING_DTO;
                 sendResponse(resp, new Gson().toJson(vehicle), HttpServletResponse.SC_OK);
             }
         } catch (NotFoundException e) {
@@ -66,9 +62,6 @@ public class VehicleServlet extends Servlet {
             String json = getJson(req);
             VehicleUpdateDto vehicleUpdate = new Gson().fromJson(json, VehicleUpdateDto.class);
             service.update(vehicleUpdate);
-
-//            sendResponse(resp, new Gson().toJson(vehicleUpdate), HttpServletResponse.SC_OK);
-
         } catch (NotFoundException e) {
             sendResponse(resp, e.getMessage(), HttpServletResponse.SC_NOT_FOUND);
         } catch (Exception e) {

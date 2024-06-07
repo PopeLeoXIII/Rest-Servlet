@@ -11,6 +11,8 @@ public class VehicleOutGoingDto {
     private CityOutGoingDto city;
     private List<ReservationSmallOutGoingDto> reservationList;
 
+    public VehicleOutGoingDto() {}
+
     public VehicleOutGoingDto(Long id, String name, CityOutGoingDto city, List<ReservationSmallOutGoingDto> reservationList) {
         this.id = id;
         this.name = name;

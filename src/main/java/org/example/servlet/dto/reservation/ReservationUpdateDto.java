@@ -17,6 +17,8 @@ public class ReservationUpdateDto {
     private List<VehicleUpdateDto> vehicleList;
     private UserUpdateDto user;
 
+    public ReservationUpdateDto() {}
+
     public ReservationUpdateDto(Long id, Status status, String startDatetime, String endDatetime, List<VehicleUpdateDto> vehicleList, UserUpdateDto user) {
         this.id = id;
         this.status = status;

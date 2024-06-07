@@ -3,12 +3,13 @@ package org.example.repository.impl;
 import org.example.db.ConnectionManager;
 import org.example.model.SimpleEntity;
 import org.example.repository.SimpleEntityRepository;
-import org.example.repository.mapper.SimpleResultSetMapper;
+import org.example.service.mapper.SimpleResultSetMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 public class SimpleEntityRepositoryImpl implements SimpleEntityRepository {
@@ -35,12 +36,17 @@ public class SimpleEntityRepositoryImpl implements SimpleEntityRepository {
     }
 
     @Override
-    public SimpleEntity findAll() {
+    public List<SimpleEntity> findAll() {
         return null;
     }
 
     @Override
     public SimpleEntity save(SimpleEntity simpleEntity) {
         return null;
+    }
+
+    @Override
+    public void update(SimpleEntity simpleEntity) {
+
     }
 }

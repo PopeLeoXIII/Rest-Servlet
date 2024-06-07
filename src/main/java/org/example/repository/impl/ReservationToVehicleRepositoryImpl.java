@@ -30,13 +30,18 @@ public class ReservationToVehicleRepositoryImpl implements ReservationToVehicleR
     }
 
     @Override
-    public ReservationToVehicle findAll() {
+    public List<ReservationToVehicle> findAll() {
         return null;
     }
 
     @Override
     public ReservationToVehicle save(ReservationToVehicle reservationToVehicle) {
         return null;
+    }
+
+    @Override
+    public void update(ReservationToVehicle reservationToVehicle) {
+
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.example.repository.mapper;
+package org.example.service.mapper;
 
 import org.example.model.SimpleEntity;
 

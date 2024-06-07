@@ -4,8 +4,8 @@ import org.example.NotFoundException;
 import org.example.model.City;
 import org.example.repository.CityRepository;
 import org.example.repository.impl.CityRepositoryImpl;
-import org.example.repository.mapper.CityMapper;
-import org.example.repository.mapper.impl.CityMapperImpl;
+import org.example.service.mapper.CityMapper;
+import org.example.service.mapper.impl.CityMapperImpl;
 import org.example.service.CityService;
 import org.example.servlet.dto.city.CityIncomingDto;
 import org.example.servlet.dto.city.CityOutGoingDto;
@@ -37,21 +37,24 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public void update(CityUpdateDto updateDto) throws NotFoundException {
-
+        City city = mapper.mapUpdateDto(updateDto);
+        repository.update(city);
     }
 
     @Override
     public CityOutGoingDto findById(Long id) throws NotFoundException {
-        return null;
+        City city = repository.findById(id);
+        return mapper.mapModel(city);
     }
 
     @Override
     public List<CityOutGoingDto> findAll() {
-        return List.of();
+        List<City> cityList = repository.findAll();
+        return mapper.mapModelList(cityList);
     }
 
     @Override
-    public boolean delete(Long id) throws NotFoundException {
-        return false;
+    public boolean delete(Long id) {
+        return repository.deleteById(id);
     }
 }

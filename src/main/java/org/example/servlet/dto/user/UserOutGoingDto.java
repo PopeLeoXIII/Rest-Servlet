@@ -12,6 +12,8 @@ public class UserOutGoingDto {
     private String surname;
     private List<ReservationSmallOutGoingDto> reservationList;
 
+    public UserOutGoingDto() {}
+
     public UserOutGoingDto(Long id, String name, String surname, List<ReservationSmallOutGoingDto> reservationList) {
         this.id = id;
         this.name = name;

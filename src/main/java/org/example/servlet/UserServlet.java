@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.NotFoundException;
 import org.example.service.UserService;
-import org.example.service.impl.UserServiceImp;
+import org.example.service.impl.UserServiceImpl;
 import org.example.servlet.dto.user.UserIncomingDto;
 import org.example.servlet.dto.user.UserOutGoingDto;
 import org.example.servlet.dto.user.UserUpdateDto;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @WebServlet(urlPatterns = {"/user/*"})
 public class UserServlet extends Servlet {
-    private final transient UserService service = UserServiceImp.getInstance();
+    private final transient UserService service = UserServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

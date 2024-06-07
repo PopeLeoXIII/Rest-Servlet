@@ -1,9 +1,10 @@
-package org.example.repository.mapper.impl;
+package org.example.service.mapper.impl;
 
+import org.example.model.City;
 import org.example.model.Vehicle;
-import org.example.repository.mapper.CityMapper;
-import org.example.repository.mapper.ReservationMapper;
-import org.example.repository.mapper.VehicleMapper;
+import org.example.service.mapper.CityMapper;
+import org.example.service.mapper.ReservationMapper;
+import org.example.service.mapper.VehicleMapper;
 import org.example.servlet.dto.vehicle.VehicleIncomingDto;
 import org.example.servlet.dto.vehicle.VehicleOutGoingDto;
 import org.example.servlet.dto.vehicle.VehicleSmallOutGoingDto;
@@ -29,10 +30,13 @@ public class VehicleMapperImpl implements VehicleMapper {
 
     @Override
     public Vehicle mapIncomingDto(VehicleIncomingDto vehicleIncomingDto) {
+        City city = vehicleIncomingDto.getCity() != null ?
+            cityMapper.mapUpdateDto(vehicleIncomingDto.getCity()) : null;
+
         return new Vehicle(
                 null,
                 vehicleIncomingDto.getName(),
-                null,
+                city,
                 null
         );
     }
@@ -49,6 +53,10 @@ public class VehicleMapperImpl implements VehicleMapper {
 
     @Override
     public VehicleOutGoingDto mapModel(Vehicle model) {
+        if (model == null) {
+            return new VehicleOutGoingDto();
+        }
+
         return new VehicleOutGoingDto(
                 model.getId(),
                 model.getName(),

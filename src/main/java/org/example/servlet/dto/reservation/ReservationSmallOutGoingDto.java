@@ -8,6 +8,8 @@ public class ReservationSmallOutGoingDto {
     private String startDatetime;
     private String endDatetime;
 
+    public ReservationSmallOutGoingDto() {}
+
     public ReservationSmallOutGoingDto(Long id, Status status, String startDatetime, String endDatetime) {
         this.id = id;
         this.status = status;

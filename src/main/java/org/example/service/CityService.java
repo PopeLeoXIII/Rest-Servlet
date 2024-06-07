@@ -16,5 +16,5 @@ public interface CityService {
 
     List<CityOutGoingDto> findAll();
 
-    boolean delete(Long id) throws NotFoundException;
+    boolean delete(Long id);
 }

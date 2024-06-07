@@ -1,8 +1,8 @@
-package org.example.repository.mapper.impl;
+package org.example.service.mapper.impl;
 
 import org.example.model.City;
-import org.example.repository.mapper.CityMapper;
-import org.example.repository.mapper.VehicleMapper;
+import org.example.service.mapper.CityMapper;
+import org.example.service.mapper.VehicleMapper;
 import org.example.servlet.dto.city.CityIncomingDto;
 import org.example.servlet.dto.city.CityOutGoingDto;
 import org.example.servlet.dto.city.CityUpdateDto;
@@ -34,15 +34,23 @@ public class CityMapperImpl implements CityMapper {
 
     @Override
     public City mapUpdateDto(CityUpdateDto updateDto) {
+//        List<Vehicle> list = null;
+//        if (updateDto.getName() == null) {
+//            list = updateDto.getVehicleList().stream().map(vehicleMapper::mapUpdateDto).toList();
+//        }
         return new City(
                 updateDto.getId(),
                 updateDto.getName(),
-                updateDto.getVehicleList().stream().map(vehicleMapper::mapUpdateDto).toList()
+                null
         );
     }
 
     @Override
     public CityOutGoingDto mapModel(City model) {
+        if (model == null) {
+            return new CityOutGoingDto();
+        }
+
         return new CityOutGoingDto(
                 model.getId(),
                 model.getName(),

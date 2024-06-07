@@ -14,6 +14,8 @@ public class ReservationOutGoingDto {
     private List<VehicleOutGoingDto> vehicleList;
     private UserOutGoingDto user;
 
+    public ReservationOutGoingDto() {}
+
     public ReservationOutGoingDto(Long id, Status status, String startDatetime, String endDatetime, List<VehicleOutGoingDto> vehicleList, UserOutGoingDto user) {
         this.id = id;
         this.status = status;

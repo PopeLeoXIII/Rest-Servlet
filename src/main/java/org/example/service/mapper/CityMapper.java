@@ -1,4 +1,4 @@
-package org.example.repository.mapper;
+package org.example.service.mapper;
 
 import org.example.model.City;
 import org.example.servlet.dto.city.CityIncomingDto;

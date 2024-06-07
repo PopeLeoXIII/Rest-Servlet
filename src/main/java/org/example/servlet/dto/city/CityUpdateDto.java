@@ -7,14 +7,14 @@ import java.util.List;
 public class CityUpdateDto {
     private Long id;
     private String name;
-    private List<VehicleUpdateDto> vehicleList; //?
+//    private List<VehicleUpdateDto> vehicleList;
 
     public CityUpdateDto(){}
 
-    public CityUpdateDto(Long id, String name, List<VehicleUpdateDto> vehicleList) {
+    public CityUpdateDto(Long id, String name) { //, List<VehicleUpdateDto> vehicleList) {
         this.id = id;
         this.name = name;
-        this.vehicleList = vehicleList;
+//        this.vehicleList = vehicleList;
     }
 
     public Long getId() {
@@ -25,7 +25,7 @@ public class CityUpdateDto {
         return name;
     }
 
-    public List<VehicleUpdateDto> getVehicleList() {
-        return vehicleList;
-    }
+//    public List<VehicleUpdateDto> getVehicleList() {
+//        return vehicleList;
+//    }
 }

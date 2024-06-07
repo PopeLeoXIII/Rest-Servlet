@@ -1,8 +1,8 @@
-package org.example.repository.mapper.impl;
+package org.example.service.mapper.impl;
 
 import org.example.model.User;
-import org.example.repository.mapper.ReservationMapper;
-import org.example.repository.mapper.UserMapper;
+import org.example.service.mapper.ReservationMapper;
+import org.example.service.mapper.UserMapper;
 import org.example.servlet.dto.user.UserIncomingDto;
 import org.example.servlet.dto.user.UserOutGoingDto;
 import org.example.servlet.dto.user.UserUpdateDto;
@@ -46,6 +46,10 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public UserOutGoingDto mapModel(User model) {
+        if (model == null) {
+            return new UserOutGoingDto();
+        }
+
         return new UserOutGoingDto(
                 model.getId(),
                 model.getName(),

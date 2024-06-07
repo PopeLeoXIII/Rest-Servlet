@@ -44,7 +44,7 @@ public class City {
 
     public List<Vehicle> getVehicleList() {
         if (vehicleList == null) {
-            this.vehicleList = vehicleRepository.findAllByCityId(this.id);
+            this.vehicleList = vehicleRepository.findAllByCityId(this);
         }
         return vehicleList;
     }
@@ -59,5 +59,9 @@ public class City {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public boolean haveVehicleList() {
+        return vehicleList != null && !vehicleList.isEmpty();
     }
 }

@@ -1,9 +1,9 @@
-package org.example.repository.mapper.impl;
+package org.example.service.mapper.impl;
 
 import org.example.model.Reservation;
-import org.example.repository.mapper.ReservationMapper;
-import org.example.repository.mapper.UserMapper;
-import org.example.repository.mapper.VehicleMapper;
+import org.example.service.mapper.ReservationMapper;
+import org.example.service.mapper.UserMapper;
+import org.example.service.mapper.VehicleMapper;
 import org.example.servlet.dto.reservation.ReservationIncomingDto;
 import org.example.servlet.dto.reservation.ReservationOutGoingDto;
 import org.example.servlet.dto.reservation.ReservationSmallOutGoingDto;
@@ -56,6 +56,10 @@ public class ReservationMapperImpl implements ReservationMapper {
 
     @Override
     public ReservationOutGoingDto mapModel(Reservation model) {
+        if (model == null) {
+            return new ReservationOutGoingDto();
+        }
+
         return new ReservationOutGoingDto(
                 model.getId(),
                 model.getStatus(),

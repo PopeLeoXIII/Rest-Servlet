@@ -27,15 +27,10 @@ public class CityServlet extends Servlet {
         try {
             if ("all".equals(pathPart[1])) {
                 List<CityOutGoingDto> allCity = service.findAll();
-
-//                allCity = Arrays.asList(CITY_OUT_GOING_DTO, CITY_OUT_GOING_DTO);
                 sendResponse(resp, new Gson().toJson(allCity), HttpServletResponse.SC_OK);
             } else if (isNumber(pathPart[1])) {
                 Long id = getLong(pathPart[1]);
-
                 CityOutGoingDto city = service.findById(id);
-
-//                city = CITY_OUT_GOING_DTO;
                 sendResponse(resp, new Gson().toJson(city), HttpServletResponse.SC_OK);
             }
         } catch (NotFoundException e) {
@@ -67,8 +62,6 @@ public class CityServlet extends Servlet {
             CityUpdateDto cityUpdate = new Gson().fromJson(json, CityUpdateDto.class);
             service.update(cityUpdate);
 
-//            sendResponse(resp, new Gson().toJson(cityUpdate), HttpServletResponse.SC_OK);
-
         } catch (NotFoundException e) {
             sendResponse(resp, e.getMessage(), HttpServletResponse.SC_NOT_FOUND);
         } catch (Exception e) {
@@ -92,8 +85,8 @@ public class CityServlet extends Servlet {
                 }
             }
 
-        } catch (NotFoundException e) {
-            sendResponse(resp, e.getMessage(), HttpServletResponse.SC_NOT_FOUND);
+//        } catch (NotFoundException e) {
+//            sendResponse(resp, e.getMessage(), HttpServletResponse.SC_NOT_FOUND);
         } catch (Exception e) {
             sendResponse(resp, "Bad request.", HttpServletResponse.SC_BAD_REQUEST);
         }

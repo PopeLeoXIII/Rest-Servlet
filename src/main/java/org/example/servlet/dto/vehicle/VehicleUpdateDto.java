@@ -14,6 +14,8 @@ public class VehicleUpdateDto {
     private CityUpdateDto city;
     private List<ReservationUpdateDto> reservationList;
 
+    public VehicleUpdateDto() {}
+
     public VehicleUpdateDto(Long id, String name, CityUpdateDto city, List<ReservationUpdateDto> reservationList) {
         this.id = id;
         this.name = name;

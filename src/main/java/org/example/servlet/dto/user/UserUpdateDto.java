@@ -11,6 +11,8 @@ public class UserUpdateDto {
     private String surname;
     private List<ReservationUpdateDto> reservationList;
 
+    public UserUpdateDto() {}
+
     public UserUpdateDto(Long id, String name, String surname, List<ReservationUpdateDto> reservationList) {
         this.id = id;
         this.name = name;

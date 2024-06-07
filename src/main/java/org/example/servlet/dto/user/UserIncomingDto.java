@@ -4,6 +4,8 @@ public class UserIncomingDto {
     private String name;
     private String surname;
 
+    public UserIncomingDto() {}
+
     public UserIncomingDto(String name, String surname) {
         this.name = name;
         this.surname = surname;
