@@ -3,7 +3,7 @@ package org.example.model;
 import org.example.repository.ReservationToVehicleRepository;
 import org.example.repository.impl.ReservationToVehicleRepositoryImpl;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -22,21 +22,39 @@ import java.util.List;
  */
 
 public class Reservation {
+//    private static final ReservationRepository repository = ReservationRepositoryImpl.getInstance();
     private static final ReservationToVehicleRepository reservationToVehicleRepository = ReservationToVehicleRepositoryImpl.getInstance();
     private Long id;
     private Status status;
-    private LocalDateTime startDatetime;
-    private LocalDateTime endDatetime;
+    private Timestamp startDatetime;
+    private Timestamp endDatetime;
     private List<Vehicle> vehicleList;
     private User user;
 
     public Reservation() {}
 
-    public Reservation(Long id, Status status, LocalDateTime startDatetime, LocalDateTime endDatetime, List<Vehicle> vehicleList, User user) {
+    public Reservation(Long id, Status status, Timestamp startDatetime, Timestamp endDatetime, List<Vehicle> vehicleList, User user) {
         this.id = id;
         this.status = status;
         this.startDatetime = startDatetime;
         this.endDatetime = endDatetime;
+        this.vehicleList = vehicleList;
+        this.user = user;
+    }
+
+    public Reservation(Long id, Status status, String startDatetime, String endDatetime, List<Vehicle> vehicleList, User user) {
+        this.id = id;
+        this.status = status;
+        try {
+            this.startDatetime = Timestamp.valueOf(startDatetime);
+        } catch (IllegalArgumentException e) {
+            this.startDatetime = null; // new Timestamp(System.currentTimeMillis());
+        }
+       try {
+            this.endDatetime = Timestamp.valueOf(endDatetime);
+        } catch (IllegalArgumentException e) {
+            this.endDatetime = null; // new Timestamp(System.currentTimeMillis());
+        }
         this.vehicleList = vehicleList;
         this.user = user;
     }
@@ -53,25 +71,27 @@ public class Reservation {
         this.status = status;
     }
 
-    public LocalDateTime getStartDatetime() {
+    public Timestamp getStartDatetime() {
         return startDatetime;
     }
 
-    public void setStartDatetime(LocalDateTime startDatetime) {
+    public void setStartDatetime(Timestamp startDatetime) {
         this.startDatetime = startDatetime;
     }
 
-    public LocalDateTime getEndDatetime() {
+    public Timestamp getEndDatetime() {
         return endDatetime;
     }
 
-    public void setEndDatetime(LocalDateTime endDatetime) {
+    public void setEndDatetime(Timestamp endDatetime) {
         this.endDatetime = endDatetime;
     }
 
     public List<Vehicle> getVehicleList() {
         if (vehicleList == null) {
-            vehicleList = reservationToVehicleRepository.findVehicleByReservationId(this.id);
+            vehicleList =
+                    reservationToVehicleRepository.getVehicleByReservationId(this.id);
+//                    repository.getVehicleListByReservationId(this.id);
         }
         return vehicleList;
     }

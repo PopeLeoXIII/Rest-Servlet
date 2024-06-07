@@ -55,7 +55,7 @@ public class User {
 
     public List<Reservation> getReservationList() {
         if (reservationList == null) {
-            this.reservationList = reservationRepository.findAllByUserId();
+            this.reservationList = reservationRepository.findAllByUserId(this);
         }
         return reservationList;
     }

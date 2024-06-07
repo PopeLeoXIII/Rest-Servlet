@@ -35,9 +35,9 @@ CREATE TABLE IF NOT EXISTS reservations
 
 CREATE TABLE IF NOT EXISTS reservations_vehicles
 (
-    reservation_vehicle_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    reservation_id         BIGINT REFERENCES reservations (id),
-    vehicle_id             BIGINT REFERENCES vehicles (id),
+    id             BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    reservation_id BIGINT REFERENCES reservations (id),
+    vehicle_id     BIGINT REFERENCES vehicles (id),
     CONSTRAINT unique_link UNIQUE (reservation_id, vehicle_id)
 );
 

@@ -18,7 +18,6 @@ public class ReservationMapperImpl implements ReservationMapper {
     private static final UserMapper userMapper = UserMapperImpl.getInstance();
 
     private static ReservationMapper instance;
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     private ReservationMapperImpl() {
     }
@@ -35,8 +34,8 @@ public class ReservationMapperImpl implements ReservationMapper {
         return new Reservation(
                 null,
                 reservationIncomingDto.getStatus(),
-                LocalDateTime.parse(reservationIncomingDto.getStartDatetime(), formatter),
-                LocalDateTime.parse(reservationIncomingDto.getEndDatetime(), formatter),
+                reservationIncomingDto.getStartDatetime(),
+                reservationIncomingDto.getEndDatetime(),
                 null,
                 null
         );
@@ -47,8 +46,8 @@ public class ReservationMapperImpl implements ReservationMapper {
         return new Reservation(
                 reservationUpdateDto.getId(),
                 reservationUpdateDto.getStatus(),
-                LocalDateTime.parse(reservationUpdateDto.getStartDatetime(), formatter),
-                LocalDateTime.parse(reservationUpdateDto.getEndDatetime(), formatter),
+                reservationUpdateDto.getStartDatetime(),
+                reservationUpdateDto.getEndDatetime(),
                 reservationUpdateDto.getVehicleList().stream().map(vehicleMapper::mapUpdateDto).toList(),
                 userMapper.mapUpdateDto(reservationUpdateDto.getUser())
         );
@@ -63,8 +62,8 @@ public class ReservationMapperImpl implements ReservationMapper {
         return new ReservationOutGoingDto(
                 model.getId(),
                 model.getStatus(),
-                model.getStartDatetime().format(formatter),
-                model.getEndDatetime().format(formatter),
+                model.getStartDatetime().toString(),
+                model.getEndDatetime().toString(),
                 vehicleMapper.mapModelList(model.getVehicleList()),
                 userMapper.mapModel(model.getUser())
         );
@@ -80,8 +79,8 @@ public class ReservationMapperImpl implements ReservationMapper {
         return new ReservationSmallOutGoingDto(
                 model.getId(),
                 model.getStatus(),
-                model.getStartDatetime().format(formatter),
-                model.getEndDatetime().format(formatter)
+                model.getStartDatetime().toString(),
+                model.getEndDatetime().toString()
         );
     }
 
