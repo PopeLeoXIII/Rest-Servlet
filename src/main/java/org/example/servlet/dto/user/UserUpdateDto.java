@@ -1,6 +1,5 @@
 package org.example.servlet.dto.user;
 
-import org.example.model.Reservation;
 import org.example.servlet.dto.reservation.ReservationUpdateDto;
 
 import java.util.List;

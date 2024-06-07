@@ -34,10 +34,6 @@ public class CityMapperImpl implements CityMapper {
 
     @Override
     public City mapUpdateDto(CityUpdateDto updateDto) {
-//        List<Vehicle> list = null;
-//        if (updateDto.getName() == null) {
-//            list = updateDto.getVehicleList().stream().map(vehicleMapper::mapUpdateDto).toList();
-//        }
         return new City(
                 updateDto.getId(),
                 updateDto.getName(),

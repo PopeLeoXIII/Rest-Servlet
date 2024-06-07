@@ -14,7 +14,7 @@ public class SqlQuery {
             "WHERE r.id = ?";
 
     public static final String SELECT_USER_JOIN_RES_ALL =
-            "SELECT status, start_datetime, end_datetime, user_id, name, surname " +
+            "SELECT r.id, status, start_datetime, end_datetime, user_id, name, surname " +
             "FROM reservations r JOIN users u " +
             "ON r.user_id = u.id";
 

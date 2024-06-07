@@ -1,6 +1,7 @@
 package org.example.service.mapper.impl;
 
 import org.example.model.City;
+import org.example.model.Reservation;
 import org.example.model.Vehicle;
 import org.example.service.mapper.CityMapper;
 import org.example.service.mapper.ReservationMapper;
@@ -42,12 +43,17 @@ public class VehicleMapperImpl implements VehicleMapper {
     }
 
     @Override
-    public Vehicle mapUpdateDto(VehicleUpdateDto vehicleUpdateDto) {
+    public Vehicle mapUpdateDto(VehicleUpdateDto updateDto) {
+        List<Reservation> list = null;
+        if (updateDto.getReservationList() != null && !updateDto.getReservationList().isEmpty()) {
+            list = updateDto.getReservationList().stream().map(reservationMapper::mapUpdateDto).toList();
+        }
+
         return new Vehicle(
-                vehicleUpdateDto.getId(),
-                vehicleUpdateDto.getName(),
-                cityMapper.mapUpdateDto(vehicleUpdateDto.getCity()),
-                vehicleUpdateDto.getReservationList().stream().map(reservationMapper::mapUpdateDto).toList()
+                updateDto.getId(),
+                updateDto.getName(),
+                cityMapper.mapUpdateDto(updateDto.getCity()),
+                list
         );
     }
 

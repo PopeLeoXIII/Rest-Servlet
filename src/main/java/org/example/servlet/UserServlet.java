@@ -27,15 +27,10 @@ public class UserServlet extends Servlet {
         try {
             if ("all".equals(pathPart[1])) {
                 List<UserOutGoingDto> allUser = service.findAll();
-
-//              allUser = Arrays.asList(User_OUT_GOING_DTO, User_OUT_GOING_DTO);
                 sendResponse(resp, new Gson().toJson(allUser), HttpServletResponse.SC_OK);
             } else if (isNumber(pathPart[1])) {
                 Long id = getLong(pathPart[1]);
-
                 UserOutGoingDto user = service.findById(id);
-
-//                User = User_OUT_GOING_DTO;
                 sendResponse(resp, new Gson().toJson(user), HttpServletResponse.SC_OK);
             }
         } catch (NotFoundException e) {
@@ -66,9 +61,6 @@ public class UserServlet extends Servlet {
             String json = getJson(req);
             UserUpdateDto userUpdate = new Gson().fromJson(json, UserUpdateDto.class);
             service.update(userUpdate);
-
-//            sendResponse(resp, new Gson().toJson(UserUpdate), HttpServletResponse.SC_OK);
-
         } catch (NotFoundException e) {
             sendResponse(resp, e.getMessage(), HttpServletResponse.SC_NOT_FOUND);
         } catch (Exception e) {

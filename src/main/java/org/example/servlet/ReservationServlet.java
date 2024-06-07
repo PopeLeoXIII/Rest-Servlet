@@ -27,15 +27,11 @@ public class ReservationServlet extends Servlet {
         try {
             if ("all".equals(pathPart[1])) {
                 List<ReservationOutGoingDto> allReservation = service.findAll();
-
-//                allReservation = Arrays.asList(CITY_OUT_GOING_DTO, CITY_OUT_GOING_DTO);
                 sendResponse(resp, new Gson().toJson(allReservation), HttpServletResponse.SC_OK);
             } else if (isNumber(pathPart[1])) {
                 Long id = getLong(pathPart[1]);
 
                 ReservationOutGoingDto reservation = service.findById(id);
-
-//                reservation = CITY_OUT_GOING_DTO;
                 sendResponse(resp, new Gson().toJson(reservation), HttpServletResponse.SC_OK);
             }
         } catch (NotFoundException e) {
@@ -66,9 +62,6 @@ public class ReservationServlet extends Servlet {
             String json = getJson(req);
             ReservationUpdateDto reservationUpdate = new Gson().fromJson(json, ReservationUpdateDto.class);
             service.update(reservationUpdate);
-
-//            sendResponse(resp, new Gson().toJson(reservationUpdate), HttpServletResponse.SC_OK);
-
         } catch (NotFoundException e) {
             sendResponse(resp, e.getMessage(), HttpServletResponse.SC_NOT_FOUND);
         } catch (Exception e) {

@@ -107,8 +107,8 @@ public class UserRepositoryImpl implements UserRepository {
              PreparedStatement s = connection.prepareStatement(query);) {
 
             s.setString(1, user.getName());
-            s.setString(1, user.getSurname());
-            s.setLong(2, user.getId());
+            s.setString(2, user.getSurname());
+            s.setLong(3, user.getId());
 
             s.executeUpdate();
         } catch (SQLException e) {
