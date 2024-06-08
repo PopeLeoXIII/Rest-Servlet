@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.exception.NotFoundException;
+import org.example.repository.exception.NotFoundException;
 import org.example.servlet.dto.reservation.ReservationIncomingDto;
 import org.example.servlet.dto.reservation.ReservationOutGoingDto;
 import org.example.servlet.dto.reservation.ReservationUpdateDto;
@@ -16,5 +16,5 @@ public interface ReservationService {
 
     List<ReservationOutGoingDto> findAll();
 
-    boolean delete(Long roleId) throws NotFoundException;
+    boolean delete(Long roleId);
 }

@@ -3,10 +3,10 @@ package org.example.servlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.repository.exception.NotFoundException;
-import org.example.service.UserService;
-import org.example.service.impl.UserServiceImpl;
-import org.example.servlet.dto.user.UserIncomingDto;
-import org.example.servlet.dto.user.UserUpdateDto;
+import org.example.service.ReservationService;
+import org.example.service.impl.ReservationServiceImpl;
+import org.example.servlet.dto.reservation.ReservationIncomingDto;
+import org.example.servlet.dto.reservation.ReservationUpdateDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,9 +25,9 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-public class UserServletTest {
-    private static MockedStatic<UserServiceImpl> mokStaticService;
-    private static final UserService mokServiceInstance = mock(UserService.class);
+public class ReservationServletTest {
+    private static MockedStatic<ReservationServiceImpl> mokStaticService;
+    private static final ReservationService mokServiceInstance = mock(ReservationService.class);
 
     private final HttpServletRequest mockRequest = mock(HttpServletRequest.class);
     private final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
@@ -35,7 +35,7 @@ public class UserServletTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        mokStaticService = mockStatic(UserServiceImpl.class);
+        mokStaticService = mockStatic(ReservationServiceImpl.class);
         Mockito.doReturn(new PrintWriter(Writer.nullWriter())).when(mockResponse).getWriter();
     }
 
@@ -48,10 +48,10 @@ public class UserServletTest {
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 10, 100})
     void doGetTest(int id) throws NotFoundException {
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
-        Mockito.doReturn("user/" + id).when(mockRequest).getPathInfo();
+        Mockito.doReturn("reservation/" + id).when(mockRequest).getPathInfo();
 
         servlet.doGet(mockRequest, mockResponse);
 
@@ -63,10 +63,10 @@ public class UserServletTest {
     @ValueSource(ints = {0, -2, -3, -10, 10000})
     void doGetNotFoundTest(int id) throws NotFoundException {
         doThrow(NotFoundException.class).when(mokServiceInstance).findById(Mockito.anyLong());
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
-        Mockito.doReturn("user/" + id).when(mockRequest).getPathInfo();
+        Mockito.doReturn("reservation/" + id).when(mockRequest).getPathInfo();
 
         servlet.doGet(mockRequest, mockResponse);
 
@@ -76,10 +76,10 @@ public class UserServletTest {
 
     @Test
     void doGetAllTest() {
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
-        Mockito.doReturn("user/all").when(mockRequest).getPathInfo();
+        Mockito.doReturn("reservation/all").when(mockRequest).getPathInfo();
 
         servlet.doGet(mockRequest, mockResponse);
 
@@ -89,10 +89,10 @@ public class UserServletTest {
     @ParameterizedTest
     @ValueSource(strings = {"", "a", "get", "get/1"})
     void doGetBadRequestTest(String notId) throws NotFoundException {
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
-        Mockito.doReturn("user/" + notId).when(mockRequest).getPathInfo();
+        Mockito.doReturn("reservation/" + notId).when(mockRequest).getPathInfo();
 
         servlet.doGet(mockRequest, mockResponse);
 
@@ -101,22 +101,22 @@ public class UserServletTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"name", "123Name*", "CITY"})
-    void doPostTest(String name) throws IOException {
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+    @ValueSource(strings = {"2016-06-22 19:10:25-07", "2040-06-22 19:10:25-07", "1600-06-22 19:10:25-07"})
+    void doPostTest(String dateTime) throws IOException {
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
         Mockito.doReturn(mockBufferedReader).when(mockRequest).getReader();
-        String userJson= "{\"name\":\"" + name + "\"}";
-        Mockito.doReturn(userJson, (Object) null).when(mockBufferedReader).readLine();
+        String reservationJson= "{\"startDatetime\":\"" + dateTime + "\"}";
+        Mockito.doReturn(reservationJson, (Object) null).when(mockBufferedReader).readLine();
 
         servlet.doPost(mockRequest, mockResponse);
 
-        ArgumentCaptor<UserIncomingDto> argumentCaptor = ArgumentCaptor.forClass(UserIncomingDto.class);
+        ArgumentCaptor<ReservationIncomingDto> argumentCaptor = ArgumentCaptor.forClass(ReservationIncomingDto.class);
         Mockito.verify(mokServiceInstance).save(argumentCaptor.capture());
-        UserIncomingDto userDto = argumentCaptor.getValue();
+        ReservationIncomingDto reservationDto = argumentCaptor.getValue();
 
-        Assertions.assertEquals(name, userDto.getName());
+        Assertions.assertEquals(dateTime, reservationDto.getStartDatetime());
         Mockito.verify(mockResponse).setStatus(HttpServletResponse.SC_CREATED);
 
     }
@@ -124,8 +124,8 @@ public class UserServletTest {
     @ParameterizedTest
     @ValueSource(strings = {"", "CITY", "1234"})
     void doPostBadRequestTest(String json) throws IOException {
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
         Mockito.doReturn(mockBufferedReader).when(mockRequest).getReader();
         Mockito.doReturn(json, (Object) null).when(mockBufferedReader).readLine();
@@ -138,12 +138,12 @@ public class UserServletTest {
     @Test
     void doPostIllegalArgTest() throws IOException {
         doThrow(IllegalArgumentException.class).when(mokServiceInstance).save(Mockito.any());
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
         Mockito.doReturn(mockBufferedReader).when(mockRequest).getReader();
-        String userJson= "{\"id\":\"1\"}";
-        Mockito.doReturn(userJson, (Object) null).when(mockBufferedReader).readLine();
+        String reservationJson= "{\"id\":\"1\"}";
+        Mockito.doReturn(reservationJson, (Object) null).when(mockBufferedReader).readLine();
 
         servlet.doPost(mockRequest, mockResponse);
 
@@ -154,28 +154,28 @@ public class UserServletTest {
     @ParameterizedTest
     @ValueSource(longs = {1, 15, 10000})
     void doUpdateTest(long id) throws IOException, NotFoundException {
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
         Mockito.doReturn(mockBufferedReader).when(mockRequest).getReader();
-        String userJson= "{\"id\":\"" + id + "\"}";
-        Mockito.doReturn(userJson, (Object) null).when(mockBufferedReader).readLine();
+        String reservationJson= "{\"id\":\"" + id + "\"}";
+        Mockito.doReturn(reservationJson, (Object) null).when(mockBufferedReader).readLine();
 
         servlet.doPut(mockRequest, mockResponse);
 
-        ArgumentCaptor<UserUpdateDto> argumentCaptor = ArgumentCaptor.forClass(UserUpdateDto.class);
+        ArgumentCaptor<ReservationUpdateDto> argumentCaptor = ArgumentCaptor.forClass(ReservationUpdateDto.class);
         Mockito.verify(mokServiceInstance).update(argumentCaptor.capture());
-        UserUpdateDto userDto = argumentCaptor.getValue();
+        ReservationUpdateDto reservationDto = argumentCaptor.getValue();
 
         Mockito.verify(mockResponse).setStatus(HttpServletResponse.SC_OK);
-        Assertions.assertEquals(id, userDto.getId());
+        Assertions.assertEquals(id, reservationDto.getId());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", "CITY", "1234"})
     void doUpdateBadRequestTest(String json) throws IOException {
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
         Mockito.doReturn(mockBufferedReader).when(mockRequest).getReader();
         Mockito.doReturn(json, (Object) null).when(mockBufferedReader).readLine();
@@ -188,12 +188,12 @@ public class UserServletTest {
     @Test
     void doUpdateIllegalArgTest() throws IOException, NotFoundException {
         doThrow(IllegalArgumentException.class).when(mokServiceInstance).update(Mockito.any());
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
         Mockito.doReturn(mockBufferedReader).when(mockRequest).getReader();
-        String userJson= "{\"name\":\"user\"}";
-        Mockito.doReturn(userJson, (Object) null).when(mockBufferedReader).readLine();
+        String reservationJson= "{\"name\":\"reservation\"}";
+        Mockito.doReturn(reservationJson, (Object) null).when(mockBufferedReader).readLine();
 
         servlet.doPut(mockRequest, mockResponse);
 
@@ -203,12 +203,12 @@ public class UserServletTest {
     @Test
     void doUpdateNotFoundTest() throws IOException, NotFoundException {
         doThrow(NotFoundException.class).when(mokServiceInstance).update(Mockito.any());
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
         Mockito.doReturn(mockBufferedReader).when(mockRequest).getReader();
-        String userJson= "{\"name\":\"user\"}";
-        Mockito.doReturn(userJson, (Object) null).when(mockBufferedReader).readLine();
+        String reservationJson= "{\"name\":\"reservation\"}";
+        Mockito.doReturn(reservationJson, (Object) null).when(mockBufferedReader).readLine();
 
         servlet.doPut(mockRequest, mockResponse);
 
@@ -219,10 +219,10 @@ public class UserServletTest {
     @ValueSource(ints = {1, 2, 3, 10, 100})
     void doDeleteTest(int id) {
         Mockito.doReturn(true).when(mokServiceInstance).delete(Mockito.anyLong());
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
-        Mockito.doReturn("user/" + id).when(mockRequest).getPathInfo();
+        Mockito.doReturn("reservation/" + id).when(mockRequest).getPathInfo();
 
         servlet.doDelete(mockRequest, mockResponse);
 
@@ -234,10 +234,10 @@ public class UserServletTest {
     @ValueSource(ints = {0, -2, -3, -10, 10000})
     void doDeleteNotFoundTest(int id) {
         Mockito.doReturn(false).when(mokServiceInstance).delete(Mockito.anyLong());
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
-        Mockito.doReturn("user/" + id).when(mockRequest).getPathInfo();
+        Mockito.doReturn("reservation/" + id).when(mockRequest).getPathInfo();
 
         servlet.doDelete(mockRequest, mockResponse);
 
@@ -248,10 +248,10 @@ public class UserServletTest {
     @ParameterizedTest
     @ValueSource(strings = {"", "a", "delete", "delete/1"})
     void doDeleteBadRequestTest(String notId) {
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
-        Mockito.doReturn("user/" + notId).when(mockRequest).getPathInfo();
+        Mockito.doReturn("reservation/" + notId).when(mockRequest).getPathInfo();
 
         servlet.doDelete(mockRequest, mockResponse);
 
@@ -263,10 +263,10 @@ public class UserServletTest {
     @Test
     void doGetAll() {
         Mockito.doReturn(List.of()).when(mokServiceInstance).findAll();
-        mokStaticService.when(UserServiceImpl::getInstance).thenReturn(mokServiceInstance);
-        UserServlet servlet = new UserServlet();
+        mokStaticService.when(ReservationServiceImpl::getInstance).thenReturn(mokServiceInstance);
+        ReservationServlet servlet = new ReservationServlet();
 
-        Mockito.doReturn("user/all").when(mockRequest).getPathInfo();
+        Mockito.doReturn("reservation/all").when(mockRequest).getPathInfo();
 
         servlet.doGet(mockRequest, mockResponse);
 

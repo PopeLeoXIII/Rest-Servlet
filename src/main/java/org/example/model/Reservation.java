@@ -4,7 +4,12 @@ import org.example.repository.ReservationToVehicleRepository;
 import org.example.repository.impl.ReservationToVehicleRepositoryImpl;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Бронирование
@@ -44,16 +49,8 @@ public class Reservation {
     public Reservation(Long id, Status status, String startDatetime, String endDatetime, List<Vehicle> vehicleList, User user) {
         this.id = id;
         this.status = status;
-        try {
-            this.startDatetime = Timestamp.valueOf(startDatetime);
-        } catch (IllegalArgumentException e) {
-            this.startDatetime = null; // new Timestamp(System.currentTimeMillis());
-        }
-       try {
-            this.endDatetime = Timestamp.valueOf(endDatetime);
-        } catch (IllegalArgumentException e) {
-            this.endDatetime = null; // new Timestamp(System.currentTimeMillis());
-        }
+        this.startDatetime = stringToTimestamp(startDatetime);
+        this.endDatetime = stringToTimestamp(endDatetime);
         this.vehicleList = vehicleList;
         this.user = user;
     }
@@ -104,5 +101,28 @@ public class Reservation {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public static Timestamp stringToTimestamp(String stringDate) {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            Date parsedDate = dateFormat.parse(stringDate);
+            return new java.sql.Timestamp(parsedDate.getTime());
+        } catch(Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return Objects.equals(id, that.id) && status == that.status && Objects.equals(startDatetime, that.startDatetime) && Objects.equals(endDatetime, that.endDatetime) && Objects.equals(user.getId(), that.user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, status, startDatetime, endDatetime, user);
     }
 }

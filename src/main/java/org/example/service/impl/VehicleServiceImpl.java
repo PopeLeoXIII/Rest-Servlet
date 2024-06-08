@@ -1,6 +1,6 @@
 package org.example.service.impl;
 
-import org.example.exception.NotFoundException;
+import org.example.repository.exception.NotFoundException;
 import org.example.model.Vehicle;
 import org.example.repository.VehicleRepository;
 import org.example.repository.impl.VehicleRepositoryImpl;
@@ -30,6 +30,12 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public VehicleOutGoingDto save(VehicleIncomingDto incomingDto) {
+        if (incomingDto == null || incomingDto.getName() == null || incomingDto.getName().isEmpty())
+            throw new IllegalArgumentException ("Empty vehicle name");
+
+        if (incomingDto.getCity() == null || incomingDto.getCity().getId() == null)
+            throw new IllegalArgumentException ("Empty city id");
+
         Vehicle vehicle = mapper.mapIncomingDto(incomingDto);
         vehicle = repository.save(vehicle);
         return mapper.mapModel(vehicle);
@@ -37,6 +43,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public void update(VehicleUpdateDto updateDto) throws NotFoundException {
+        if (updateDto == null || updateDto.getId() == null)
+            throw new IllegalArgumentException("Empty vehicle id");
+
         Vehicle vehicle = mapper.mapUpdateDto(updateDto);
         repository.update(vehicle);
     }

@@ -1,6 +1,6 @@
 package org.example.service.impl;
 
-import org.example.exception.NotFoundException;
+import org.example.repository.exception.NotFoundException;
 import org.example.model.City;
 import org.example.repository.CityRepository;
 import org.example.repository.impl.CityRepositoryImpl;

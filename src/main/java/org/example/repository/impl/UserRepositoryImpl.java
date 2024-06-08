@@ -1,7 +1,7 @@
 package org.example.repository.impl;
 
-import org.example.exception.NotFoundException;
-import org.example.exception.RepositoryException;
+import org.example.repository.exception.NotFoundException;
+import org.example.repository.exception.RepositoryException;
 import org.example.db.ConnectionManager;
 import org.example.db.ConnectionManagerImpl;
 import org.example.model.User;

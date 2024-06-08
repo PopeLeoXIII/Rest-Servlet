@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.exception.NotFoundException;
+import org.example.repository.exception.NotFoundException;
 import org.example.servlet.dto.user.UserIncomingDto;
 import org.example.servlet.dto.user.UserOutGoingDto;
 import org.example.servlet.dto.user.UserUpdateDto;

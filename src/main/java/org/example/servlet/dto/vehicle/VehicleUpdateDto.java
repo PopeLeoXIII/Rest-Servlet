@@ -10,15 +10,13 @@ public class VehicleUpdateDto {
     private String name;
 
     private CityUpdateDto city;
-    private List<ReservationUpdateDto> reservationList;
 
     public VehicleUpdateDto() {}
 
-    public VehicleUpdateDto(Long id, String name, CityUpdateDto city, List<ReservationUpdateDto> reservationList) {
+    public VehicleUpdateDto(Long id, String name, CityUpdateDto city) {
         this.id = id;
         this.name = name;
         this.city = city;
-        this.reservationList = reservationList;
     }
 
     public Long getId() {
@@ -31,9 +29,5 @@ public class VehicleUpdateDto {
 
     public CityUpdateDto getCity() {
         return city;
-    }
-
-    public List<ReservationUpdateDto> getReservationList() {
-        return reservationList;
     }
 }

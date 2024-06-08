@@ -17,12 +17,12 @@ public class ReservationIncomingDto {
 
     public ReservationIncomingDto() {}
 
-    public ReservationIncomingDto(Status status, String startDatetime, String endDatetime, UserUpdateDto user, List<VehiclePlaneDto> vehicles) {
+    public ReservationIncomingDto(Status status, String startDatetime, String endDatetime, List<VehiclePlaneDto> vehicles, UserUpdateDto user) {
         this.status = status;
         this.startDatetime = startDatetime;
         this.endDatetime = endDatetime;
-        this.user = user;
         this.vehicleList = vehicles;
+        this.user = user;
     }
 
     public Status getStatus() {

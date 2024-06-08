@@ -1,6 +1,6 @@
 package org.example.service.impl;
 
-import org.example.exception.NotFoundException;
+import org.example.repository.exception.NotFoundException;
 import org.example.model.Reservation;
 import org.example.repository.ReservationRepository;
 import org.example.repository.impl.ReservationRepositoryImpl;
@@ -14,7 +14,7 @@ import org.example.servlet.dto.reservation.ReservationUpdateDto;
 import java.util.List;
 
 public class ReservationServiceImpl implements ReservationService {
-    private ReservationRepository repository = ReservationRepositoryImpl.getInstance();
+    private final ReservationRepository repository = ReservationRepositoryImpl.getInstance();
     private final ReservationMapper mapper = ReservationMapperImpl.getInstance();
     private static ReservationService instance;
 
@@ -30,6 +30,24 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationOutGoingDto save(ReservationIncomingDto incomingDto) {
+        if (incomingDto == null || incomingDto.getStatus() == null)
+            throw new IllegalArgumentException ("Empty reservation status");
+
+        if (incomingDto.getStartDatetime() == null || incomingDto.getStartDatetime().isEmpty())
+            throw new IllegalArgumentException ("Empty reservation start time");
+
+        if (Reservation.stringToTimestamp(incomingDto.getStartDatetime()) == null)
+            throw new IllegalArgumentException ("Wrong format reservation start time");
+
+        if (incomingDto.getEndDatetime() == null || incomingDto.getEndDatetime().isEmpty())
+            throw new IllegalArgumentException ("Empty reservation end time");
+
+        if (Reservation.stringToTimestamp(incomingDto.getEndDatetime()) == null)
+            throw new IllegalArgumentException ("Wrong format reservation end time");
+
+        if (incomingDto.getUser() == null || incomingDto.getUser().getId() == null)
+            throw new IllegalArgumentException ("Empty reservation user id");
+
         Reservation reservation = mapper.mapIncomingDto(incomingDto);
         reservation = repository.save(reservation);
         return mapper.mapModel(reservation);
@@ -37,6 +55,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void update(ReservationUpdateDto updateDto) throws NotFoundException {
+        if (updateDto == null || updateDto.getId() == null)
+            throw new IllegalArgumentException("Empty reservation id");
+
         Reservation reservation = mapper.mapUpdateDto(updateDto);
         repository.update(reservation);
     }

@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.exception.NotFoundException;
+import org.example.repository.exception.NotFoundException;
 import org.example.servlet.dto.vehicle.VehicleIncomingDto;
 import org.example.servlet.dto.vehicle.VehicleOutGoingDto;
 import org.example.servlet.dto.vehicle.VehicleUpdateDto;
@@ -16,5 +16,5 @@ public interface VehicleService {
 
     List<VehicleOutGoingDto> findAll();
 
-    boolean delete(Long roleId) throws NotFoundException;
+    boolean delete(Long roleId);
 }

@@ -38,22 +38,17 @@ public class VehicleMapperImpl implements VehicleMapper {
                 null,
                 vehicleIncomingDto.getName(),
                 city,
-                null
+                List.of()
         );
     }
 
     @Override
     public Vehicle mapUpdateDto(VehicleUpdateDto updateDto) {
-        List<Reservation> list = null;
-        if (updateDto.getReservationList() != null && !updateDto.getReservationList().isEmpty()) {
-            list = updateDto.getReservationList().stream().map(reservationMapper::mapUpdateDto).toList();
-        }
-
         return new Vehicle(
                 updateDto.getId(),
                 updateDto.getName(),
                 cityMapper.mapUpdateDto(updateDto.getCity()),
-                list
+                List.of()
         );
     }
 
@@ -95,7 +90,7 @@ public class VehicleMapperImpl implements VehicleMapper {
                 planeDto.getId(),
                 planeDto.getName(),
                 null,
-                null
+                List.of()
         );
     }
 

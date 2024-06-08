@@ -4,6 +4,7 @@ import org.example.repository.ReservationToVehicleRepository;
 import org.example.repository.impl.ReservationToVehicleRepositoryImpl;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Транспортное средство (пока что велосипеды, но вдруг еще что будет, поддерживаем мастшабируемость)
@@ -63,5 +64,18 @@ public class Vehicle {
 
     public void setReservationList(List<Reservation> reservationList) {
         this.reservationList = reservationList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vehicle vehicle = (Vehicle) o;
+        return Objects.equals(id, vehicle.id) && Objects.equals(name, vehicle.name) && Objects.equals(city, vehicle.city);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, city);
     }
 }

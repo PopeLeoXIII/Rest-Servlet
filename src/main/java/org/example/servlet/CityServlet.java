@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.exception.NotFoundException;
+import org.example.repository.exception.NotFoundException;
 import org.example.service.CityService;
 import org.example.service.impl.CityServiceImpl;
 import org.example.servlet.dto.city.CityIncomingDto;

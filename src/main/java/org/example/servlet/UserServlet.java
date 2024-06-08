@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.exception.NotFoundException;
+import org.example.repository.exception.NotFoundException;
 import org.example.service.UserService;
 import org.example.service.impl.UserServiceImpl;
 import org.example.servlet.dto.user.UserIncomingDto;
@@ -50,6 +50,7 @@ public class UserServlet extends Servlet {
             UserIncomingDto userIncoming = new Gson().fromJson(json, UserIncomingDto.class);
             if (userIncoming == null) {
                 sendResponse(resp, BAD_REQUEST, HttpServletResponse.SC_BAD_REQUEST);
+                return;
             }
             UserOutGoingDto userOutGoing = service.save(userIncoming);
             sendResponse(resp, new Gson().toJson(userOutGoing), HttpServletResponse.SC_CREATED);
@@ -68,6 +69,7 @@ public class UserServlet extends Servlet {
             UserUpdateDto userUpdate = new Gson().fromJson(json, UserUpdateDto.class);
             if (userUpdate == null) {
                 sendResponse(resp, BAD_REQUEST, HttpServletResponse.SC_BAD_REQUEST);
+                return;
             }
             service.update(userUpdate);
             sendResponse(resp, "", HttpServletResponse.SC_OK);
