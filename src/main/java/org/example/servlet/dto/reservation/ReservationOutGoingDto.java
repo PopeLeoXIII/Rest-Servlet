@@ -2,7 +2,6 @@ package org.example.servlet.dto.reservation;
 
 import org.example.model.Status;
 import org.example.servlet.dto.user.UserOutGoingDto;
-import org.example.servlet.dto.vehicle.VehicleOutGoingDto;
 import org.example.servlet.dto.vehicle.VehiclePlaneDto;
 
 import java.util.List;

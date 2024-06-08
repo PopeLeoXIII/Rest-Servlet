@@ -1,6 +1,6 @@
 package org.example.service.impl;
 
-import org.example.NotFoundException;
+import org.example.exception.NotFoundException;
 import org.example.model.User;
 import org.example.repository.UserRepository;
 import org.example.repository.impl.UserRepositoryImpl;
@@ -30,6 +30,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserOutGoingDto save(UserIncomingDto incomingDto) {
+        if (incomingDto == null || incomingDto.getName() == null || incomingDto.getName().isEmpty()) {
+            throw new IllegalArgumentException ("Empty user name");
+        }
+
         User user = mapper.mapIncomingDto(incomingDto);
         user = repository.save(user);
         return mapper.mapModel(user);
@@ -37,6 +41,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(UserUpdateDto updateDto) throws NotFoundException {
+        if (updateDto == null || updateDto.getId() == null)
+            throw new IllegalArgumentException("Empty user id");
+
         User user = mapper.mapUpdateDto(updateDto);
         repository.update(user);
     }

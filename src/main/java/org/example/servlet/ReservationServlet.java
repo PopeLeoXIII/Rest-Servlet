@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.NotFoundException;
+import org.example.exception.NotFoundException;
 import org.example.service.ReservationService;
 import org.example.service.impl.ReservationServiceImpl;
 import org.example.servlet.dto.reservation.ReservationIncomingDto;

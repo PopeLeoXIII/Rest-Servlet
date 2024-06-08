@@ -1,6 +1,6 @@
 package org.example.service.impl;
 
-import org.example.NotFoundException;
+import org.example.exception.NotFoundException;
 import org.example.model.City;
 import org.example.repository.CityRepository;
 import org.example.repository.impl.CityRepositoryImpl;
@@ -30,6 +30,10 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public CityOutGoingDto save(CityIncomingDto incomingDto) {
+        if (incomingDto == null || incomingDto.getName() == null || incomingDto.getName().isEmpty()) {
+            throw new IllegalArgumentException ("Empty city name");
+        }
+
         City city = mapper.mapIncomingDto(incomingDto);
         city = repository.save(city);
         return mapper.mapModel(city);
@@ -37,6 +41,9 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public void update(CityUpdateDto updateDto) throws NotFoundException {
+        if (updateDto == null || updateDto.getId() == null)
+            throw new IllegalArgumentException("Empty city id");
+
         City city = mapper.mapUpdateDto(updateDto);
         repository.update(city);
     }

@@ -4,6 +4,7 @@ import org.example.repository.ReservationRepository;
 import org.example.repository.impl.ReservationRepositoryImpl;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Пользователь системы
@@ -62,5 +63,18 @@ public class User {
 
     public void setReservationList(List<Reservation> reservationList) {
         this.reservationList = reservationList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(surname, user.surname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname);
     }
 }

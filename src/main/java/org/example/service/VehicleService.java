@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.NotFoundException;
+import org.example.exception.NotFoundException;
 import org.example.servlet.dto.vehicle.VehicleIncomingDto;
 import org.example.servlet.dto.vehicle.VehicleOutGoingDto;
 import org.example.servlet.dto.vehicle.VehicleUpdateDto;

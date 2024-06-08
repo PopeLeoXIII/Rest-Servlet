@@ -4,6 +4,7 @@ import org.example.repository.VehicleRepository;
 import org.example.repository.impl.VehicleRepositoryImpl;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Город, в котором существует техника для бронирования
@@ -64,4 +65,13 @@ public class City {
     public boolean haveVehicleList() {
         return vehicleList != null && !vehicleList.isEmpty();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        City city = (City) o;
+        return Objects.equals(id, city.id) && Objects.equals(name, city.name);
+    }
+
 }

@@ -1,6 +1,6 @@
 package org.example.repository;
 
-import org.example.NotFoundException;
+import org.example.exception.NotFoundException;
 
 import java.util.List;
 

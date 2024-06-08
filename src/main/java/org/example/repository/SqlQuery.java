@@ -68,6 +68,25 @@ public class SqlQuery {
     public static final String SELECT_VEHICLE_BY_CITY_ID =
             "SELECT id, name FROM vehicles WHERE city_id = ?;";
 
+
+    public static final String SELECT_CITY_BY_ID =
+            "SELECT id, name FROM citys WHERE id = ?";
+
+    public static final String SELECT_CITY_ALL =
+            "SELECT id, name FROM citys";
+
+    public static final String INSERT_CITY =
+            "INSERT INTO citys (name) VALUES (?);";
+
+
+    public static final String UPDATE_CITY =
+            "UPDATE citys SET name = ? WHERE id = ?";
+
+    public static final String DELETE_CITY =
+            "DELETE FROM citys WHERE id = ?";
+
+
 }
+
 
 

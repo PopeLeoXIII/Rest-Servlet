@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.NotFoundException;
+import org.example.exception.NotFoundException;
 import org.example.servlet.dto.reservation.ReservationIncomingDto;
 import org.example.servlet.dto.reservation.ReservationOutGoingDto;
 import org.example.servlet.dto.reservation.ReservationUpdateDto;

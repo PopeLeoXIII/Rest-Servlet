@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.NotFoundException;
+import org.example.exception.NotFoundException;
 import org.example.servlet.dto.city.CityIncomingDto;
 import org.example.servlet.dto.city.CityOutGoingDto;
 import org.example.servlet.dto.city.CityUpdateDto;
@@ -8,7 +8,7 @@ import org.example.servlet.dto.city.CityUpdateDto;
 import java.util.List;
 
 public interface CityService {
-    CityOutGoingDto save(CityIncomingDto incomingDto);
+    CityOutGoingDto save(CityIncomingDto incomingDto) throws IllegalArgumentException;
 
     void update(CityUpdateDto updateDto) throws NotFoundException;
 

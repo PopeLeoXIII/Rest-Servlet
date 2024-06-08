@@ -1,7 +1,7 @@
 package org.example.repository.impl;
 
-import org.example.NotFoundException;
-import org.example.RepositoryException;
+import org.example.exception.NotFoundException;
+import org.example.exception.RepositoryException;
 import org.example.db.ConnectionManager;
 import org.example.db.ConnectionManagerImpl;
 import org.example.model.City;
@@ -10,6 +10,8 @@ import org.example.repository.CityRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.example.repository.SqlQuery.*;
 
 public class CityRepositoryImpl implements CityRepository {
     private final ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
@@ -27,15 +29,16 @@ public class CityRepositoryImpl implements CityRepository {
 
     @Override
     public City findById(Long id) throws NotFoundException {
-        String query = "SELECT * FROM citys WHERE id = ?";
-
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(query);) {
+             PreparedStatement s = connection.prepareStatement(SELECT_CITY_BY_ID)) {
 
             s.setLong(1, id);
-            try (ResultSet rs = s.executeQuery();) {
+            try (ResultSet rs = s.executeQuery()) {
                 if (rs.next()) {
-                    return new City(rs.getLong("id"), rs.getString("name"), null);
+                    return new City(
+                            rs.getLong("id"),
+                            rs.getString("name"),
+                            List.of());
                 } else {
                     throw new NotFoundException("No city with id " + id);
                 }
@@ -47,15 +50,17 @@ public class CityRepositoryImpl implements CityRepository {
 
     @Override
     public List<City> findAll() {
-        String query = "SELECT * FROM citys";
-
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(query);) {
+             PreparedStatement s = connection.prepareStatement(SELECT_CITY_ALL)) {
 
             try (ResultSet rs = s.executeQuery();) {
                 List<City> cityList = new ArrayList<>();
                 while (rs.next()) {
-                    cityList.add(new City(rs.getLong("id"), rs.getString("name"), null));
+                    cityList.add(
+                            new City(
+                                    rs.getLong("id"),
+                                    rs.getString("name"),
+                                    List.of()));
                 }
                 return cityList;
             }
@@ -66,16 +71,17 @@ public class CityRepositoryImpl implements CityRepository {
 
     @Override
     public City save(City city) {
-        String query = "INSERT INTO citys (name) VALUES (?);";
-
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+             PreparedStatement s = connection.prepareStatement(INSERT_CITY, Statement.RETURN_GENERATED_KEYS)) {
 
             s.setString(1, city.getName());
             s.executeUpdate();
             try (ResultSet rs = s.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return new City(rs.getLong("id"),  city.getName(), null);
+                    return new City(
+                            rs.getLong("id"),
+                            city.getName(),
+                            List.of());
                 } else {
                     throw new RepositoryException("No create city id ");
                 }
@@ -87,10 +93,8 @@ public class CityRepositoryImpl implements CityRepository {
 
     @Override
     public void update(City city) {
-        String query = "UPDATE citys SET name = ? WHERE id = ?";
-
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(query);) {
+             PreparedStatement s = connection.prepareStatement(UPDATE_CITY)) {
 
             s.setString(1, city.getName());
             s.setLong(2, city.getId());
@@ -103,16 +107,13 @@ public class CityRepositoryImpl implements CityRepository {
 
     @Override
     public boolean deleteById(Long id) {
-        String query = "DELETE FROM citys WHERE id = ?";
-
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(query);) {
+             PreparedStatement s = connection.prepareStatement(DELETE_CITY);) {
 
             s.setLong(1, id);
-            boolean ok = s.executeUpdate() > 0;
-            return ok;
+            return s.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new RepositoryException(e);
+            return false;
         }
     }
 }

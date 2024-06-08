@@ -1,6 +1,6 @@
 package org.example.service.impl;
 
-import org.example.NotFoundException;
+import org.example.exception.NotFoundException;
 import org.example.model.Vehicle;
 import org.example.repository.VehicleRepository;
 import org.example.repository.impl.VehicleRepositoryImpl;

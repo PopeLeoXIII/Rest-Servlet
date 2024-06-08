@@ -3,13 +3,10 @@ package org.example.servlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.servlet.dto.city.CityOutGoingDto;
-import org.example.servlet.dto.vehicle.VehiclePlaneDto;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 
 public class Servlet extends HttpServlet {
 
@@ -33,13 +30,16 @@ public class Servlet extends HttpServlet {
         return req.getPathInfo().split("/");
     }
 
-    static void sendResponse(HttpServletResponse resp, String responseAnswer, int status ) throws IOException {
+    static void sendResponse(HttpServletResponse resp, String responseAnswer, int status ) {
         resp.setStatus(status);
-
-        if (!responseAnswer.isEmpty()) {
-            PrintWriter out = resp.getWriter();
-            out.write(responseAnswer);
-            out.flush();
+        try {
+            if (responseAnswer != null && !responseAnswer.isEmpty()) {
+                PrintWriter out = resp.getWriter();
+                out.write(responseAnswer);
+                out.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -59,14 +59,4 @@ public class Servlet extends HttpServlet {
             return null;
         }
     }
-
-    final static CityOutGoingDto CITY_OUT_GOING_DTO = new CityOutGoingDto(
-            1L,
-            "saratov",
-            Arrays.asList(
-                    new VehiclePlaneDto(1L, "velo 1"),
-                    new VehiclePlaneDto(2L, "velo 2")
-            )
-    );
-    
 }
