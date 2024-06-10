@@ -34,12 +34,12 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     @Override
     public Vehicle findById(Long id) throws NotFoundException {
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement getVehicle = connection.prepareStatement(SELECT_VEHICLE_BY_ID);) {
+             PreparedStatement getVehicle = connection.prepareStatement(SELECT_VEHICLE_BY_ID)) {
 
             List<Reservation> reservationList = rToVRepository.findReservationListByVehicleId(id);
 
             getVehicle.setLong(1, id);
-            try (ResultSet rs = getVehicle.executeQuery();) {
+            try (ResultSet rs = getVehicle.executeQuery()) {
                 if (rs.next()) {
                     return createVehicle(id, rs, reservationList);
                 } else {
@@ -57,7 +57,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement getVehicle = connection.prepareStatement(SELECT_VEHICLE_ALL)) {
 
-            try (ResultSet rs = getVehicle.executeQuery();) {
+            try (ResultSet rs = getVehicle.executeQuery()) {
                 List<Vehicle> vehicleList = new ArrayList<>();
                 while (rs.next()) {
                     long id = rs.getLong("id");
@@ -86,15 +86,15 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 
     @Override
     public Vehicle save(Vehicle vehicle) {
+        if (vehicle.getCity() == null || vehicle.getCity().getName() == null) {
+            throw new RepositoryException(" ERROR: null value in column \"city_id\" of relation \"vehicles\" violates not-null constraint");
+        }
+
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(INSERT_VEHICLE, Statement.RETURN_GENERATED_KEYS);) {
+             PreparedStatement s = connection.prepareStatement(INSERT_VEHICLE, Statement.RETURN_GENERATED_KEYS)) {
 
             s.setString(1, vehicle.getName());
-            if (vehicle.getCity() == null) {
-                s.setNull(2, Types.NULL);
-            } else {
-                s.setLong(2, vehicle.getCity().getId());
-            }
+            s.setLong(2, vehicle.getCity().getId());
 
             s.executeUpdate();
             try (ResultSet rs = s.getGeneratedKeys()) {
@@ -116,7 +116,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     @Override
     public void update(Vehicle vehicle) {
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(UPDATE_VEHICLE);) {
+             PreparedStatement s = connection.prepareStatement(UPDATE_VEHICLE)) {
 
             s.setString(1, vehicle.getName());
             if (vehicle.getCity() == null) {
@@ -137,7 +137,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     @Override
     public boolean deleteById(Long id) {
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(DELETE_VEHICLE);) {
+             PreparedStatement s = connection.prepareStatement(DELETE_VEHICLE)) {
 
             List<Reservation> reservationList = rToVRepository.findReservationListByVehicleId(id);
 
@@ -152,22 +152,18 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     }
 
     @Override
-    public List<Vehicle> findAllByCityId(City city) {
+    public List<Vehicle> findAllByCityId(Long id) {
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(SELECT_VEHICLE_BY_CITY_ID);) {
-            s.setLong(1, city.getId());
-            try (ResultSet rs = s.executeQuery();) {
+             PreparedStatement s = connection.prepareStatement(SELECT_VEHICLE_BY_CITY_ID)) {
+            s.setLong(1, id);
+            try (ResultSet rs = s.executeQuery()) {
                 List<Vehicle> vehicleList = new ArrayList<>();
                 while (rs.next()) {
                     vehicleList.add(
                             new Vehicle(
                                     rs.getLong("id"),
                                     rs.getString("name"),
-                                    new City(
-                                            city.getId(),
-                                            city.getName(),
-                                            null
-                                    ),
+                                    null,
                                     null));
                 }
                 return vehicleList;

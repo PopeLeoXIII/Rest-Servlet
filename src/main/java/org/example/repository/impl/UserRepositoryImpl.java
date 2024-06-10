@@ -11,6 +11,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.example.repository.SqlQuery.*;
+
 public class UserRepositoryImpl implements UserRepository {
     private final ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private static UserRepository instance;
@@ -25,18 +27,15 @@ public class UserRepositoryImpl implements UserRepository {
         return instance;
     }
 
-
     @Override
     public User findById(Long id) throws NotFoundException {
-        String query = "SELECT * FROM users WHERE id = ?";
-
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(query);) {
+             PreparedStatement s = connection.prepareStatement(SELECT_USER_BY_ID);) {
 
             s.setLong(1, id);
             try (ResultSet rs = s.executeQuery();) {
                 if (rs.next()) {
-                    return getUserFromResultSet(rs);
+                    return createUserFromResultSet(rs);
                 } else {
                     throw new NotFoundException("No user with id " + id);
                 }
@@ -46,26 +45,16 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    private static User getUserFromResultSet(ResultSet rs) throws SQLException {
-        return new User(
-                rs.getLong("id"),
-                rs.getString("name"),
-                rs.getString("surname"),
-                null);
-    }
-
     @Override
     public List<User> findAll() {
-        String query = "SELECT * FROM users";
-
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(query);) {
+             PreparedStatement s = connection.prepareStatement(SELECT_USER_ALL);) {
 
             try (ResultSet rs = s.executeQuery();) {
                 List<User> userList = new ArrayList<>();
                 while (rs.next()) {
                     userList.add(
-                            getUserFromResultSet(rs));
+                            createUserFromResultSet(rs));
                 }
                 return userList;
             }
@@ -76,10 +65,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
-        String query = "INSERT INTO users (name, surname) VALUES (?, ?);";
-
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+             PreparedStatement s = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);) {
 
             s.setString(1, user.getName());
             s.setString(2, user.getSurname());
@@ -87,7 +74,7 @@ public class UserRepositoryImpl implements UserRepository {
 
             try (ResultSet rs = s.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return getUserFromResultSet(rs);
+                    return createUserFromResultSet(rs);
                 } else {
                     throw new RepositoryException("No create city id ");
                 }
@@ -99,10 +86,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void update(User user) {
-        String query = "UPDATE users SET name = ?, surname = ? WHERE id = ?";
-
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(query);) {
+             PreparedStatement s = connection.prepareStatement(UPDATE_USER);) {
 
             s.setString(1, user.getName());
             s.setString(2, user.getSurname());
@@ -116,15 +101,21 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean deleteById(Long id) {
-        String query = "DELETE FROM users WHERE id = ?";
-
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(query);) {
+             PreparedStatement s = connection.prepareStatement(DELETE_USER);) {
 
             s.setLong(1, id);
             return s.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
+    }
+
+    private static User createUserFromResultSet(ResultSet rs) throws SQLException {
+        return new User(
+                rs.getLong("id"),
+                rs.getString("name"),
+                rs.getString("surname"),
+                null);
     }
 }

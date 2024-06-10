@@ -14,4 +14,5 @@ public interface SimpleRepository<T, K> {
     T save(T t);
 
     void update(T t);
+
 }
