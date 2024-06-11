@@ -22,7 +22,6 @@ public class VehicleRepositoryImplTest {
     private static final String expectedName = "Велосипед 1";
     private static final Long expectedId = 3L;
     private static final City expectedCity = new City(1L, "Moscow", List.of());
-    private static final Vehicle expectedVehicle = new Vehicle(expectedId, expectedName, expectedCity, List.of());
 
     @BeforeAll
     static void beforeAll() {
@@ -70,9 +69,7 @@ public class VehicleRepositoryImplTest {
         City city = cityIsNull ? null : expectedCity;
         Vehicle vehicle = new Vehicle(null, name, city, null);
 
-        Exception exception = Assertions.assertThrows(RepositoryException.class, () -> {
-            repository.save(vehicle);
-        });
+        Exception exception = Assertions.assertThrows(RepositoryException.class, () -> repository.save(vehicle));
         System.out.println(exception.getMessage());
 
         Assertions.assertTrue(exception.getMessage().contains("ERROR: null value in column \"name\" of relation \"vehicles\"")
@@ -92,9 +89,7 @@ public class VehicleRepositoryImplTest {
     @ParameterizedTest
     @ValueSource(longs = {-1, 0, 10, 13, 140})
     void findByIdErrorTest(Long id) {
-        Exception exception = Assertions.assertThrows(NotFoundException.class, () -> {
-            repository.findById(id);
-        });
+        Exception exception = Assertions.assertThrows(NotFoundException.class, () -> repository.findById(id));
 
         Assertions.assertEquals("No vehicle with id " + id, exception.getMessage());
     }

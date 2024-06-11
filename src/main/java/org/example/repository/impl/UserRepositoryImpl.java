@@ -30,10 +30,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findById(Long id) throws NotFoundException {
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(SELECT_USER_BY_ID);) {
+             PreparedStatement s = connection.prepareStatement(SELECT_USER_BY_ID)) {
 
             s.setLong(1, id);
-            try (ResultSet rs = s.executeQuery();) {
+            try (ResultSet rs = s.executeQuery()) {
                 if (rs.next()) {
                     return createUserFromResultSet(rs);
                 } else {
@@ -48,9 +48,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> findAll() {
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(SELECT_USER_ALL);) {
+             PreparedStatement s = connection.prepareStatement(SELECT_USER_ALL)) {
 
-            try (ResultSet rs = s.executeQuery();) {
+            try (ResultSet rs = s.executeQuery()) {
                 List<User> userList = new ArrayList<>();
                 while (rs.next()) {
                     userList.add(
@@ -66,7 +66,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);) {
+             PreparedStatement s = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
 
             s.setString(1, user.getName());
             s.setString(2, user.getSurname());
@@ -87,7 +87,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void update(User user) {
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(UPDATE_USER);) {
+             PreparedStatement s = connection.prepareStatement(UPDATE_USER)) {
 
             s.setString(1, user.getName());
             s.setString(2, user.getSurname());
@@ -102,7 +102,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean deleteById(Long id) {
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(DELETE_USER);) {
+             PreparedStatement s = connection.prepareStatement(DELETE_USER)) {
 
             s.setLong(1, id);
             return s.executeUpdate() > 0;

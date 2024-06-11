@@ -56,9 +56,7 @@ class CityRepositoryImplTest {
         String expectedName = null;
         City city = new City(null, expectedName, null);
 
-        Exception exception = Assertions.assertThrows(RepositoryException.class, () -> {
-            repository.save(city);
-        });
+        Exception exception = Assertions.assertThrows(RepositoryException.class, () -> repository.save(city));
 
         Assertions.assertTrue(exception.getMessage().contains("ERROR: null value in column \"name\" of relation \"citys\""));
     }
@@ -76,9 +74,7 @@ class CityRepositoryImplTest {
     @ParameterizedTest
     @ValueSource(longs = {-1, 0, 5, 13, 14})
     void findByIdErrorTest(Long id) {
-        Exception exception = Assertions.assertThrows(NotFoundException.class, () -> {
-            repository.findById(id);
-        });
+        Exception exception = Assertions.assertThrows(NotFoundException.class, () -> repository.findById(id));
 
         Assertions.assertEquals("No city with id " + id, exception.getMessage());
     }

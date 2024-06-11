@@ -65,9 +65,7 @@ class UserRepositoryImplTest {
         String surname = surnameIsNull ? null : "Лошкарев";
         User user = new User(null, name, surname, null);
 
-        Exception exception = Assertions.assertThrows(RepositoryException.class, () -> {
-            repository.save(user);
-        });
+        Exception exception = Assertions.assertThrows(RepositoryException.class, () -> repository.save(user));
 
         Assertions.assertTrue(
                 exception.getMessage().contains("ERROR: null value in column \"name\" of relation \"users\"") ||
@@ -87,9 +85,7 @@ class UserRepositoryImplTest {
     @ParameterizedTest
     @ValueSource(longs = {-1, 0, 10, 13, 140})
     void findByIdErrorTest(Long id) {
-        Exception exception = Assertions.assertThrows(NotFoundException.class, () -> {
-            repository.findById(id);
-        });
+        Exception exception = Assertions.assertThrows(NotFoundException.class, () -> repository.findById(id));
 
         Assertions.assertEquals("No user with id " + id, exception.getMessage());
     }
@@ -129,9 +125,7 @@ class UserRepositoryImplTest {
     @ParameterizedTest
     @ValueSource(longs = {1, 2})
     void deleteErrorTest(Long id) {
-        Exception exception = Assertions.assertThrows(RepositoryException.class, () -> {
-            repository.deleteById(id);
-        });
+        Exception exception = Assertions.assertThrows(RepositoryException.class, () -> repository.deleteById(id));
 
         Assertions.assertTrue(
                 exception.getMessage().contains("Key (id)=(" + id + ") is still referenced from table \"reservations\"."));

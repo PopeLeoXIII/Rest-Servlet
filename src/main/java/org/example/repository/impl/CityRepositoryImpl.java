@@ -53,7 +53,7 @@ public class CityRepositoryImpl implements CityRepository {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement s = connection.prepareStatement(SELECT_CITY_ALL)) {
 
-            try (ResultSet rs = s.executeQuery();) {
+            try (ResultSet rs = s.executeQuery()) {
                 List<City> cityList = new ArrayList<>();
                 while (rs.next()) {
                     cityList.add(
@@ -108,7 +108,7 @@ public class CityRepositoryImpl implements CityRepository {
     @Override
     public boolean deleteById(Long id) {
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement s = connection.prepareStatement(DELETE_CITY);) {
+             PreparedStatement s = connection.prepareStatement(DELETE_CITY)) {
 
             s.setLong(1, id);
             return s.executeUpdate() > 0;

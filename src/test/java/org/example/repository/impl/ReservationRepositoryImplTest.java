@@ -87,9 +87,7 @@ public class ReservationRepositoryImplTest {
         map.put("user_id", new Reservation(1L, Status.ACTIVE, expectedStartDatetime, expectedEndDatetime, List.of(expectedVehicle), null));
 
         map.forEach((k, v) -> {
-            Exception exception = Assertions.assertThrows(RepositoryException.class, () -> {
-                repository.save(v);
-            });
+            Exception exception = Assertions.assertThrows(RepositoryException.class, () -> repository.save(v));
 
             Assertions.assertTrue(exception.getMessage().contains("ERROR: null value in column \"" + k +"\" of relation \"reservations\""));
         });

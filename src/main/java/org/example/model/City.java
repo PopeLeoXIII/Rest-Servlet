@@ -62,10 +62,6 @@ public class City {
                 '}';
     }
 
-    public boolean haveVehicleList() {
-        return vehicleList != null && !vehicleList.isEmpty();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

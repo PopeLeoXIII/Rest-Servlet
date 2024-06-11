@@ -44,7 +44,7 @@ public class TestcontainerManager {
     }
 
     private static Properties getProperties() {
-        try(InputStream stream = TestcontainerManager.class.getClassLoader().getResourceAsStream("db.properties");) {
+        try(InputStream stream = TestcontainerManager.class.getClassLoader().getResourceAsStream("db.properties")) {
             Properties prop = new Properties();
             prop.load(stream);
             return prop;
