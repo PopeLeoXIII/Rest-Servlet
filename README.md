@@ -20,6 +20,135 @@
 16) Ставим плагин SonarLint
 
 
+CRUD сервис для базы данных приложения позволяющей бронировать технику в офисе. Изначально задумывалось
+для общего пользованя велосипедами, самокатами и прочего колесного транспорта, что бы не возникло ситуации, 
+когда ты планируешь уехать из офиса на велосипеде, а ни одного уже не осталось.
+
+----------
+--- БД ---
+----------
+
+// Город, в котором существует техника для бронирования
+City {
+    id
+    name - название города
+    timezone - таймзона города (не реализована)
+}
+
+// Пользователь системы
+User {
+    id - идентификатор пользователя в системе
+    name - имя пользователя
+    surname - фамилия пользователя
+}
+
+// Транспортное средство (пока что велосипеды, но вдруг еще что будет, поддерживаем мастшабируемость)
+Vehicle {
+    id
+    city_id - город, в котором находится данная техника
+    name - название техники
+    image - изображение техники (не реализованно)
+}
+
+// Бронирование
+Reservation {
+    id
+    vehicle_ids (M-to-M) - список забронированной техники
+    user_id (M-to-O) - пользователь, кто забронировал
+    startDatetime - с какого времени
+    endDatetime - до какого времени
+    status [ACTIVE, CANCELED] - статус бронирования (активно / отменено)
+}
+
+
+---------------
+--- Запросы ---
+---------------
+
+Get /city/all - все города
+Get /city/id - город по id
+Post /city - создание города
+{
+    "name" : String
+}
+Put /city - изменение города
+{
+    "id" : Long
+    "name" : String
+}
+Delete /city/id - удаление города 
+
+
+Get /vehicle/all - весь транспорт
+Get /vehicle/id - транспорт по id
+Post /vehicle - создание транспорта
+{
+    "name": String,
+    "city": {
+        "id": Long,
+    }
+}
+Put /vehicle - изменение транспорта
+{
+    "id": Long,
+    "name": String,
+    "city": {
+        "id": Long,
+    }
+}
+Delete /vehicle/id - удаление транспорта
+
+Get /reservation/all - все бронирования
+Get /reservation/id - бронирование по id
+Post /reservation - создание брони
+{
+    "status": ["CANCELED", "ACTIVE"],
+    "startDatetime": Timestamp,
+    "endDatetime": Timestamp,
+    "vehicleList": [
+        {
+            "id": Long
+        }
+    ],
+    "user": {
+        "id": Long
+    }
+}
+Put /Reservation - изменение брони
+{
+    "id": Long
+    "status": ["CANCELED", "ACTIVE"],
+    "startDatetime": Timestamp,
+    "endDatetime": Timestamp,
+    "vehicleList": [
+        {
+        "id": Long
+        }
+    ],
+    "user": {
+        "id": Long
+    }
+}
+Delete /Reservation/id - удаление брони
+
+Get /user/all - все пользователи
+Get /user/id - пользователь по id
+Post /user - создание пользователя
+{
+    "name": String,
+    "surname": String
+}
+Put /user - изменение пользователя
+{
+    "id": Long,
+    "name": String,
+    "surname": String
+}
+Delete /user/id - удаление пользователя
+
+
+В планах когда нибудь добавить поддержку фотографий, реализовать следующие запросы и прикрутить тг бота.
+
 VehicleAvailability {
 "vehicle": VehicleItem,
 "nearestReservations: List<Reservation>,
