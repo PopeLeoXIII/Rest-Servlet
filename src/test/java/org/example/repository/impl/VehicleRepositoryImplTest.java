@@ -1,7 +1,7 @@
 package org.example.repository.impl;
 
-import org.example.db.ConnectionManagerImpl;
 import org.example.model.*;
+import org.example.repository.TestcontainerManager;
 import org.example.repository.VehicleRepository;
 import org.example.repository.exception.NotFoundException;
 import org.example.repository.exception.RepositoryException;
@@ -9,46 +9,29 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
-import java.util.Objects;
 
 @Testcontainers
 @Tag("DockerRequired")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class VehicleRepositoryImplTest {
     public static VehicleRepository repository = VehicleRepositoryImpl.getInstance();
-    private static final String INIT_SQL = "db-migration.sql";
 
     private static final String expectedName = "Велосипед 1";
     private static final Long expectedId = 3L;
-
     private static final City expectedCity = new City(1L, "Moscow", List.of());
     private static final Vehicle expectedVehicle = new Vehicle(expectedId, expectedName, expectedCity, List.of());
 
-
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
-            .withDatabaseName("vehicle")
-            .withUsername("root")
-            .withPassword("123")
-            .withInitScript(INIT_SQL);
-
     @BeforeAll
     static void beforeAll() {
-        postgres.start();
-
-        final String url = postgres.getJdbcUrl();
-        ConnectionManagerImpl.setRemote(url);
+        TestcontainerManager.start();
     }
 
     @AfterAll
     static void afterAll() {
-        ConnectionManagerImpl.setLocal();
-        postgres.stop();
+        TestcontainerManager.stop();
     }
 
     @BeforeEach
@@ -120,13 +103,13 @@ public class VehicleRepositoryImplTest {
     @Order(4)
     @Test
     void findAllByCityIdTest() throws NotFoundException {
-        Long id = expectedCity.getId();
-        List<Vehicle> vehicleByCityId = repository.findAllByCityId(id);
+        Long cityId = expectedCity.getId();
+        List<Vehicle> vehicleByCityId = repository.findAllByCityId(cityId);
 
-        City city = CityRepositoryImpl.getInstance().findById(id);
+        City city = CityRepositoryImpl.getInstance().findById(cityId);
 
         long count = repository.findAll().stream()
-                .filter(r -> Objects.equals(r.getCity().getId(), id)).count();
+                .filter(v -> v.getCity().getId().equals(cityId)).count();
 
         Assertions.assertEquals(city.getVehicleList().size(), vehicleByCityId.size());
         Assertions.assertEquals(count, vehicleByCityId.size());

@@ -15,15 +15,15 @@ public class Servlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
     }
 
-    //TODO переписать
     static String getJson(HttpServletRequest req) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader postData = req.getReader();
+        StringBuilder buffer = new StringBuilder();
+        BufferedReader reader = req.getReader();
         String line;
-        while ((line = postData.readLine()) != null) {
-            sb.append(line);
+        while ((line = reader.readLine()) != null) {
+            buffer.append(line);
+            buffer.append(System.lineSeparator());
         }
-        return sb.toString();
+        return buffer.toString();
     }
 
     static String[] parseRequest(HttpServletRequest req) {

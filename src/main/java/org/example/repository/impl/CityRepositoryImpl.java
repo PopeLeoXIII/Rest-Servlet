@@ -38,7 +38,7 @@ public class CityRepositoryImpl implements CityRepository {
                     return new City(
                             rs.getLong("id"),
                             rs.getString("name"),
-                            List.of());
+                            null);
                 } else {
                     throw new NotFoundException("No city with id " + id);
                 }
@@ -60,7 +60,7 @@ public class CityRepositoryImpl implements CityRepository {
                             new City(
                                     rs.getLong("id"),
                                     rs.getString("name"),
-                                    List.of()));
+                                    null));
                 }
                 return cityList;
             }
@@ -81,7 +81,7 @@ public class CityRepositoryImpl implements CityRepository {
                     return new City(
                             rs.getLong("id"),
                             city.getName(),
-                            List.of());
+                            null);
                 } else {
                     throw new RepositoryException("No create city id ");
                 }

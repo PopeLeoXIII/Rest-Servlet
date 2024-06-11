@@ -1,16 +1,14 @@
 package org.example.repository.impl;
 
-import org.example.db.ConnectionManagerImpl;
 import org.example.model.*;
 import org.example.repository.ReservationRepository;
 import org.example.repository.ReservationToVehicleRepository;
+import org.example.repository.TestcontainerManager;
 import org.example.repository.exception.NotFoundException;
 import org.example.repository.exception.RepositoryException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.*;
@@ -22,7 +20,6 @@ import java.util.*;
 public class ReservationRepositoryImplTest {
     public static ReservationRepository repository = ReservationRepositoryImpl.getInstance();
     public static ReservationToVehicleRepository joinTableRepository = ReservationToVehicleRepositoryImpl.getInstance();
-    private static final String INIT_SQL = "db-migration.sql";
 
     private static final City expectedCity = new City(1L, "Moscow", List.of());
     private static final User expectedUser = new User(5L, "Максим", "Четверкин", List.of());
@@ -38,26 +35,14 @@ public class ReservationRepositoryImplTest {
             List.of(expectedVehicle),
             expectedUser);
 
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
-            .withDatabaseName("vehicle")
-            .withUsername("root")
-            .withPassword("123")
-            .withInitScript(INIT_SQL);
-
     @BeforeAll
     static void beforeAll() {
-        postgres.start();
-
-        final String url = postgres.getJdbcUrl();
-        ConnectionManagerImpl.setRemote(url);
-
+        TestcontainerManager.start();
     }
 
     @AfterAll
     static void afterAll() {
-        ConnectionManagerImpl.setLocal();
-        postgres.stop();
+        TestcontainerManager.stop();
     }
 
     @BeforeEach

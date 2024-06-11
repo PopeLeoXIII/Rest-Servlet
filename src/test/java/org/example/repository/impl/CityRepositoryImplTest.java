@@ -1,15 +1,13 @@
 package org.example.repository.impl;
 
-import org.example.db.ConnectionManagerImpl;
 import org.example.model.City;
 import org.example.repository.CityRepository;
+import org.example.repository.TestcontainerManager;
 import org.example.repository.exception.NotFoundException;
 import org.example.repository.exception.RepositoryException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
@@ -17,27 +15,15 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CityRepositoryImplTest {
     public static CityRepository repository = CityRepositoryImpl.getInstance();
-    private static final String INIT_SQL = "db-migration.sql";
-
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
-            .withDatabaseName("vehicle")
-            .withUsername("root")
-            .withPassword("123")
-            .withInitScript(INIT_SQL);
 
     @BeforeAll
     static void beforeAll() {
-        postgres.start();
-
-        final String url = postgres.getJdbcUrl();
-        ConnectionManagerImpl.setRemote(url);
+        TestcontainerManager.start();
     }
 
     @AfterAll
     static void afterAll() {
-        ConnectionManagerImpl.setLocal();
-        postgres.stop();
+        TestcontainerManager.stop();
     }
 
     @BeforeEach
