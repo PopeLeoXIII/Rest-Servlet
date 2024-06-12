@@ -20,7 +20,6 @@ import java.util.Objects;
  */
 
 public class Vehicle {
-    private static final ReservationToVehicleRepository reservationToVehicleRepository = ReservationToVehicleRepositoryImpl.getInstance();
     private Long id;
     private String name;
     private City city;
@@ -57,6 +56,7 @@ public class Vehicle {
 
     public List<Reservation> getReservationList() {
         if (reservationList == null) {
+            ReservationToVehicleRepository reservationToVehicleRepository = ReservationToVehicleRepositoryImpl.getInstance();
             reservationList = reservationToVehicleRepository.findReservationListByVehicleId(this.id);
         }
         return reservationList;

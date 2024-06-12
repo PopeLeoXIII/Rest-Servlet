@@ -19,7 +19,6 @@ import java.util.Objects;
 
 
 public class User {
-    private static final ReservationRepository reservationRepository = ReservationRepositoryImpl.getInstance();
     private Long id;
     private String name;
     private String surname;
@@ -56,6 +55,7 @@ public class User {
 
     public List<Reservation> getReservationList() {
         if (reservationList == null) {
+            ReservationRepository reservationRepository = ReservationRepositoryImpl.getInstance();
             this.reservationList = reservationRepository.findAllByUserId(this.id);
         }
         return reservationList;

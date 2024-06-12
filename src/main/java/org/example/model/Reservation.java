@@ -5,7 +5,6 @@ import org.example.repository.impl.ReservationToVehicleRepositoryImpl;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +26,6 @@ import java.util.Objects;
  */
 
 public class Reservation {
-    private static final ReservationToVehicleRepository reservationToVehicleRepository = ReservationToVehicleRepositoryImpl.getInstance();
     private Long id;
     private Status status;
     private Timestamp startDatetime;
@@ -85,6 +83,7 @@ public class Reservation {
 
     public List<Vehicle> getVehicleList() {
         if (vehicleList == null && id != null) {
+            ReservationToVehicleRepository reservationToVehicleRepository = ReservationToVehicleRepositoryImpl.getInstance();
             vehicleList =
                     reservationToVehicleRepository.findVehicleListByReservationId(this.id);
         }

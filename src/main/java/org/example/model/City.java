@@ -18,7 +18,6 @@ import java.util.Objects;
  */
 
 public class City {
-    private static final VehicleRepository vehicleRepository = VehicleRepositoryImpl.getInstance();
     private Long id;
     private String name;
     private List<Vehicle> vehicleList;
@@ -45,6 +44,7 @@ public class City {
 
     public List<Vehicle> getVehicleList() {
         if (vehicleList == null) {
+            VehicleRepository vehicleRepository = VehicleRepositoryImpl.getInstance();
             this.vehicleList = vehicleRepository.findAllByCityId(this.id);
         }
         return vehicleList;
