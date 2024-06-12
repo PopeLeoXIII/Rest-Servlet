@@ -17,7 +17,7 @@ import java.util.List;
 @Tag("DockerRequired")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class VehicleRepositoryImplTest {
-    public static VehicleRepository repository = VehicleRepositoryImpl.getInstance();
+    public static VehicleRepository repository;
 
     private static final String expectedName = "Велосипед 1";
     private static final Long expectedId = 3L;
@@ -26,6 +26,7 @@ public class VehicleRepositoryImplTest {
     @BeforeAll
     static void beforeAll() {
         TestcontainerManager.start();
+        repository = VehicleRepositoryImpl.getInstance();
     }
 
     @AfterAll

@@ -14,11 +14,12 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Tag("DockerRequired")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CityRepositoryImplTest {
-    public static CityRepository repository = CityRepositoryImpl.getInstance();
+    public static CityRepository repository;
 
     @BeforeAll
     static void beforeAll() {
         TestcontainerManager.start();
+        repository = CityRepositoryImpl.getInstance();
     }
 
     @AfterAll

@@ -15,11 +15,12 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Tag("DockerRequired")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserRepositoryImplTest {
-    public static UserRepository repository = UserRepositoryImpl.getInstance();
+    public static UserRepository repository;
 
     @BeforeAll
     static void beforeAll() {
         TestcontainerManager.start();
+        repository = UserRepositoryImpl.getInstance();
     }
 
     @AfterAll

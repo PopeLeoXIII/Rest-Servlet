@@ -9,11 +9,17 @@ import java.util.Objects;
 
 public class ConnectionManagerImpl implements ConnectionManager {
     private static final HikariConfig config = new HikariConfig("/db.properties");
-    private static final HikariDataSource ds  = new HikariDataSource(config);
+    private static HikariDataSource ds;
     private static ConnectionManager instance;
 
     private static HikariDataSource remoteDs;
     private static boolean isRemote = false;
+
+    private ConnectionManagerImpl() {
+        if (!isRemote) {
+            ds  = new HikariDataSource(config);
+        }
+    }
 
     public static ConnectionManager getInstance() {
         if (instance == null) {

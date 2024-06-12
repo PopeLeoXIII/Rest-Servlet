@@ -18,8 +18,8 @@ import java.util.*;
 @Tag("DockerRequired")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ReservationRepositoryImplTest {
-    public static ReservationRepository repository = ReservationRepositoryImpl.getInstance();
-    public static ReservationToVehicleRepository joinTableRepository = ReservationToVehicleRepositoryImpl.getInstance();
+    public static ReservationRepository repository;
+    public static ReservationToVehicleRepository joinTableRepository;
 
     private static final City expectedCity = new City(1L, "Moscow", List.of());
     private static final User expectedUser = new User(5L, "Максим", "Четверкин", List.of());
@@ -38,6 +38,8 @@ public class ReservationRepositoryImplTest {
     @BeforeAll
     static void beforeAll() {
         TestcontainerManager.start();
+        repository = ReservationRepositoryImpl.getInstance();
+        joinTableRepository = ReservationToVehicleRepositoryImpl.getInstance();
     }
 
     @AfterAll
